@@ -1,0 +1,448 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://gaia.fdi.ucm.es/ontologies/vacation.owl#"
+     xml:base="http://gaia.fdi.ucm.es/ontologies/vacation.owl"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:xsp="http://www.owl-ontologies.com/2005/08/07/xsp.owl#"
+     xmlns:daml="http://www.daml.org/2001/03/daml+oil#"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl"/>
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#HAS-CAUSALITY-ACTION -->
+
+    <owl:ObjectProperty rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#HAS-CAUSALITY-ACTION">
+        <rdfs:domain rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#EDM_CASE"/>
+        <rdfs:range rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#CAUSALITY"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#HAS-CAUSALITY-INACTION -->
+
+    <owl:ObjectProperty rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#HAS-CAUSALITY-INACTION"/>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#HAS-CAUSE -->
+
+    <owl:ObjectProperty rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#HAS-CAUSE">
+        <rdfs:domain rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#CAUSALITY"/>
+        <rdfs:range rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#CONSEQUENCE"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#HAS-CONSEQUENCE -->
+
+    <owl:ObjectProperty rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#HAS-CONSEQUENCE">
+        <rdfs:domain rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#CAUSALITY"/>
+        <rdfs:range rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#CONSEQUENCE"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#HAS-CONSEQUENCE-ACTION -->
+
+    <owl:ObjectProperty rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#HAS-CONSEQUENCE-ACTION">
+        <rdfs:domain rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#EDM_CASE"/>
+        <rdfs:range rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#CONSEQUENCE"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#HAS-CONSEQUENCE-INACTION -->
+
+    <owl:ObjectProperty rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#HAS-CONSEQUENCE-INACTION">
+        <rdfs:domain rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#EDM_CASE"/>
+        <rdfs:range rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#CONSEQUENCE"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#HAS-FEATURE-ACTION -->
+
+    <owl:ObjectProperty rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#HAS-FEATURE-ACTION">
+        <rdfs:domain rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#EDM_CASE"/>
+        <rdfs:range rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#FEATURE"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#HAS-FEATURE-INACTION -->
+
+    <owl:ObjectProperty rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#HAS-FEATURE-INACTION">
+        <rdfs:domain rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#EDM_CASE"/>
+        <rdfs:range rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#FEATURE"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#HAS-SOLUTION -->
+
+    <owl:ObjectProperty rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#HAS-SOLUTION">
+        <rdfs:domain rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#EDM_CASE"/>
+        <rdfs:range rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#ALTERNATIVE"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#HAS-UTILITY -->
+
+    <owl:ObjectProperty rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#HAS-UTILITY">
+        <rdfs:domain rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#CONSEQUENCE"/>
+        <rdfs:range rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#UTILITY"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#AFFECT-PEOPLE -->
+
+    <owl:Class rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#AFFECT-PEOPLE">
+        <rdfs:subClassOf rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#CONSEQUENCE"/>
+    </owl:Class>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#ALTERNATIVE -->
+
+    <owl:Class rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#ALTERNATIVE">
+        <rdfs:subClassOf rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#CBR_INDEX"/>
+    </owl:Class>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#CAUSALITY -->
+
+    <owl:Class rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#CAUSALITY">
+        <rdfs:subClassOf rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#CBR_INDEX"/>
+    </owl:Class>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#CBRCASE -->
+
+    <owl:Class rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#CBRCASE"/>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#CBR_DESCRIPTION -->
+
+    <owl:Class rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#CBR_DESCRIPTION"/>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#CBR_INDEX -->
+
+    <owl:Class rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#CBR_INDEX"/>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#CONSEQUENCE -->
+
+    <owl:Class rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#CONSEQUENCE">
+        <rdfs:subClassOf rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#CBR_INDEX"/>
+    </owl:Class>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#EDM_CASE -->
+
+    <owl:Class rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#EDM_CASE">
+        <rdfs:subClassOf rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#CBRCASE"/>
+        <rdfs:subClassOf rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#CBR_DESCRIPTION"/>
+    </owl:Class>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#FEATURE -->
+
+    <owl:Class rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#FEATURE">
+        <rdfs:subClassOf rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#CBR_INDEX"/>
+    </owl:Class>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#HIGH-GRAVITY -->
+
+    <owl:Class rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#HIGH-GRAVITY">
+        <rdfs:subClassOf rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#AFFECT-PEOPLE"/>
+    </owl:Class>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#LOW-GRAVITY -->
+
+    <owl:Class rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#LOW-GRAVITY">
+        <rdfs:subClassOf rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#AFFECT-PEOPLE"/>
+    </owl:Class>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#MID-GRAVITY -->
+
+    <owl:Class rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#MID-GRAVITY">
+        <rdfs:subClassOf rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#AFFECT-PEOPLE"/>
+    </owl:Class>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#UTILITY -->
+
+    <owl:Class rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#UTILITY">
+        <rdfs:subClassOf rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#CBR_INDEX"/>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#action -->
+
+    <owl:NamedIndividual rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#action">
+        <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#ALTERNATIVE"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#c1 -->
+
+    <owl:NamedIndividual rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#c1">
+        <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#CAUSALITY"/>
+        <HAS-CAUSE rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#kill1"/>
+        <HAS-CONSEQUENCE rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#save5"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#c2 -->
+
+    <owl:NamedIndividual rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#c2">
+        <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#CAUSALITY"/>
+        <HAS-CAUSE rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#kill1"/>
+        <HAS-CONSEQUENCE rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#saveMany"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#doctor-poison -->
+
+    <owl:NamedIndividual rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#doctor-poison">
+        <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#EDM_CASE"/>
+        <HAS-CAUSALITY-ACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#c2"/>
+        <HAS-CONSEQUENCE-ACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#kill1"/>
+        <HAS-CONSEQUENCE-ACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#saveMany"/>
+        <HAS-CONSEQUENCE-INACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#infectMany"/>
+        <HAS-FEATURE-ACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#personalForce"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#inaction -->
+
+    <owl:NamedIndividual rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#inaction">
+        <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#ALTERNATIVE"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#infectMany -->
+
+    <owl:NamedIndividual rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#infectMany">
+        <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#MID-GRAVITY"/>
+        <HAS-UTILITY rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#-10"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#kill1 -->
+
+    <owl:NamedIndividual rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#kill1">
+        <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#HIGH-GRAVITY"/>
+        <HAS-UTILITY rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#-1"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#kill5 -->
+
+    <owl:NamedIndividual rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#kill5">
+        <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#HIGH-GRAVITY"/>
+        <HAS-UTILITY rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#-5"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#personalForce -->
+
+    <owl:NamedIndividual rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#personalForce">
+        <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#FEATURE"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#save1 -->
+
+    <owl:NamedIndividual rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#save1">
+        <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#HIGH-GRAVITY"/>
+        <HAS-UTILITY rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#1"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#save5 -->
+
+    <owl:NamedIndividual rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#save5">
+        <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#HIGH-GRAVITY"/>
+        <HAS-UTILITY rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#5"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#saveMany -->
+
+    <owl:NamedIndividual rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#saveMany">
+        <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#HIGH-GRAVITY"/>
+        <HAS-UTILITY rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#10"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#trolley-bystander -->
+
+    <owl:NamedIndividual rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#trolley-bystander">
+        <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#EDM_CASE"/>
+        <HAS-CONSEQUENCE-ACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#kill1"/>
+        <HAS-CONSEQUENCE-ACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#save5"/>
+        <HAS-CONSEQUENCE-INACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#kill5"/>
+        <HAS-CONSEQUENCE-INACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#save1"/>
+        <HAS-SOLUTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#action"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#trolley-driver -->
+
+    <owl:NamedIndividual rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#trolley-driver">
+        <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#EDM_CASE"/>
+        <HAS-CONSEQUENCE-ACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#kill1"/>
+        <HAS-CONSEQUENCE-ACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#save5"/>
+        <HAS-CONSEQUENCE-INACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#kill5"/>
+        <HAS-CONSEQUENCE-INACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#save1"/>
+        <HAS-FEATURE-ACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#personalForce"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#trolley-footbridge -->
+
+    <owl:NamedIndividual rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#trolley-footbridge">
+        <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#EDM_CASE"/>
+        <HAS-CAUSALITY-ACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#c1"/>
+        <HAS-CONSEQUENCE-ACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#kill1"/>
+        <HAS-CONSEQUENCE-ACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#save5"/>
+        <HAS-CONSEQUENCE-INACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#kill5"/>
+        <HAS-CONSEQUENCE-INACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#save1"/>
+        <HAS-FEATURE-ACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#personalForce"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#trolley-loop -->
+
+    <owl:NamedIndividual rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#trolley-loop">
+        <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#EDM_CASE"/>
+        <HAS-CAUSALITY-ACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#c1"/>
+        <HAS-CONSEQUENCE-ACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#kill1"/>
+        <HAS-CONSEQUENCE-ACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#save5"/>
+        <HAS-CONSEQUENCE-INACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#kill5"/>
+        <HAS-CONSEQUENCE-INACTION rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#save1"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#-1 -->
+
+    <owl:NamedIndividual rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#-1">
+        <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#UTILITY"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#-10 -->
+
+    <owl:NamedIndividual rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#-10">
+        <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#UTILITY"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#-5 -->
+
+    <owl:NamedIndividual rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#-5">
+        <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#UTILITY"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#1 -->
+
+    <owl:NamedIndividual rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#1">
+        <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#UTILITY"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#10 -->
+
+    <owl:NamedIndividual rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#10">
+        <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#UTILITY"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://gaia.fdi.ucm.es/ontologies/vacation.owl#5 -->
+
+    <owl:NamedIndividual rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#5">
+        <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#UTILITY"/>
+    </owl:NamedIndividual>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+
