@@ -74,8 +74,8 @@ public class EDMCaseSolver implements StandardCBRApplication {
         simConfig.addMapping(new Attribute("hasConsequenceAction", EDMCaseDescription.class), new EDMSetGreedy(new EDMOntDeep()));
         simConfig.addMapping(new Attribute("hasFeaturesAction", EDMCaseDescription.class), new EDMSetGreedy(new EDMOntDeep()));
         simConfig.addMapping(new Attribute("hasFeaturesInaction", EDMCaseDescription.class), new EDMSetGreedy(new EDMOntDeep()));
-        simConfig.addMapping(new Attribute("hasCausalityAction", EDMCaseDescription.class), new EDMKeySetGreedy(new EDMOntDeep()));
-        simConfig.addMapping(new Attribute("hasCausalityInaction", EDMCaseDescription.class), new EDMKeySetGreedy(new EDMOntDeep()));
+        simConfig.addMapping(new Attribute("hasCausalityAction", EDMCaseDescription.class), new EDMKeySetGreedy(new Equal()));
+        simConfig.addMapping(new Attribute("hasCausalityInaction", EDMCaseDescription.class), new EDMKeySetGreedy(new Equal()));
 
         /*
         5. Print query, retrieve 10 most similar cases and print them

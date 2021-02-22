@@ -3,7 +3,12 @@ import colibri.similarity.EDMOntDeep;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRQuery;
 import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
 import gate.util.Pair;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 public class EDMMain {

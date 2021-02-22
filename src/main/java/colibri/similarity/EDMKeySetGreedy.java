@@ -71,7 +71,7 @@ public class EDMKeySetGreedy implements LocalSimilarityFunction {
             sims += maxSim;
         }
 
-//        System.out.println(es1.toString()+" "+es2.toString()+" "+(sims / total));
+        System.out.println(es1.toString()+" "+es2.toString()+" "+(sims / total));
 
         return sims / total;
     }
