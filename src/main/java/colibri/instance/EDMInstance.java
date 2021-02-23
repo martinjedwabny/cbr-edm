@@ -12,8 +12,6 @@ public class EDMInstance extends EDMAbstractInstance {
 
     public void fromString(String uri) {
         this.setUri(uri);
-//        if(!OntoBridgeSingleton.getOntoBridge().existsInstance(uri))
-//            throw new OntologyAccessException("Instance: "+ uri +" not found in loaded ontologies. Check names or OntoBridge configuration.");
     }
 
     public String toString() {

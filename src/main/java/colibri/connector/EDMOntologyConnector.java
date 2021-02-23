@@ -247,8 +247,7 @@ public class EDMOntologyConnector implements Connector {
     private void retrieveCaseComponent(OntoBridge ob, CaseComponent cc, String mainInstanceName, ArrayList<OntologyMapping> mappings) throws Exception
     {
         //Id
-        EDMInstance id = new EDMInstance(mainInstanceName);
-        cc.getIdAttribute().setValue(cc, id);
+        cc.getIdAttribute().setValue(cc, mainInstanceName);
 
         //Other attributes
         for(OntologyMapping om: mappings)
