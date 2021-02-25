@@ -1,54 +1,29 @@
 <OntologyConfiguration>
-	<MainOntology>
-		<LocalCopy>edm-formatted.owl</LocalCopy>
-	</MainOntology>	
-	
-	<!-- There are not subontologies -->
-	
-	<CaseMainConcept>EDM_CASE</CaseMainConcept>
-	
-	<DescriptionClassName>EDMCaseDescription</DescriptionClassName>
-	<DescriptionMappings>
-		<Map>
-			<Property>HAS-FEATURE-ACTION</Property>
-			<Concept>FEATURE</Concept>
-			<Attribute>hasFeaturesAction</Attribute>
-		</Map>
-		<Map>
-			<Property>HAS-FEATURE-INACTION</Property>
-			<Concept>FEATURE</Concept>
-			<Attribute>hasFeaturesInaction</Attribute>
-		</Map>
-		<Map>
-			<Property>HAS-CONSEQUENCE-ACTION</Property>
-			<Concept>CONSEQUENCE</Concept>
-			<Attribute>hasConsequenceAction</Attribute>
-		</Map>
-		<Map>
-			<Property>HAS-CONSEQUENCE-INACTION</Property>
-			<Concept>CONSEQUENCE</Concept>
-			<Attribute>hasConsequenceInaction</Attribute>
-		</Map>
-		<Map>
-			<Property>HAS-CAUSALITY-ACTION</Property>
-			<Concept>CAUSALITY</Concept>
-			<Attribute>hasCausalityAction</Attribute>
-		</Map>
-		<Map>
-			<Property>HAS-CAUSALITY-INACTION</Property>
-			<Concept>CAUSALITY</Concept>
-			<Attribute>hasCausalityInaction</Attribute>
-		</Map>
-	</DescriptionMappings>
+    <MainOntology>
+        <LocalCopy>edm-formatted.owl</LocalCopy>
+    </MainOntology>
 
-	<SolutionClassName>EDMCaseSolution</SolutionClassName>
-	<SolutionMappings>
-		<Map>
-			<Property>HAS-SOLUTION</Property>
-			<Concept>ALTERNATIVE</Concept>
-			<Attribute>alternative</Attribute>
-		</Map>
-	</SolutionMappings>
+    <!-- There are not subontologies -->
+
+    <CaseMainConcept>EDM_CASE</CaseMainConcept>
+
+    <DescriptionClassName>EDMCaseDescription</DescriptionClassName>
+    <DescriptionMappings>
+        <Map>
+            <Property>HAS-ALTERNATIVE</Property>
+            <Concept>ALTERNATIVE</Concept>
+            <Attribute>alternatives</Attribute>
+        </Map>
+    </DescriptionMappings>
+
+    <SolutionClassName>EDMCaseSolution</SolutionClassName>
+    <SolutionMappings>
+        <Map>
+            <Property>HAS-SOLUTION</Property>
+            <Concept>ALTERNATIVE</Concept>
+            <Attribute>alternative</Attribute>
+        </Map>
+    </SolutionMappings>
 
 
 </OntologyConfiguration>

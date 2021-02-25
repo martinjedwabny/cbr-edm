@@ -2,28 +2,30 @@
 import es.ucm.fdi.gaia.jcolibri.cbrcore.Attribute;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CaseComponent;
 import colibri.instance.EDMInstance;
+import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;
 
 public class EDMCaseSolution implements CaseComponent {
-    EDMInstance mainConcept = new EDMInstance();
-    EDMInstance alternative = new EDMInstance();
 
-    public EDMCaseSolution() {
-    }
+    private String id = "";
+
+    private EDMInstance alternative = new EDMInstance();
+
+    public EDMCaseSolution() {}
 
     public String toString() {
-        return "(" + this.mainConcept + ";" + this.alternative + ")";
+        return "(" + this.id + ";" + this.alternative + ")";
     }
 
     public Attribute getIdAttribute() {
-        return new Attribute("mainConcept", this.getClass());
+        return new Attribute("id", this.getClass());
     }
 
-    public EDMInstance getMainConcept() {
-        return this.mainConcept;
+    public String getId() {
+        return id;
     }
 
-    public void setMainConcept(EDMInstance mc) {
-        this.mainConcept = mc;
+    public void setId(String id) {
+        this.id = OntoBridgeSingleton.getOntoBridge().getShortName(id);
     }
 
     public EDMInstance getAlternative() {

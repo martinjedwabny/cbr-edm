@@ -3,34 +3,18 @@
 // (powered by FernFlower decompiler)
 //
 
-import colibri.instance.EDMDictionaryInstance;
-import colibri.instance.EDMInstance;
 import colibri.instance.EDMSetInstance;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.Attribute;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CaseComponent;
 import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 public class EDMCaseDescription implements CaseComponent {
 
     private String id = "";
-    private EDMSetInstance alternatives = new EDMSetInstance(this::createNewAlternative);
 
-    private EDMDictionaryInstance createNewAlternative(String uri) {
-        return new EDMDictionaryInstance(uri, Map.of(
-                "HAS-CONSEQUENCE", (String uuri) -> new EDMInstance(uuri),
-                "HAS-FEATURE", (String uuri) -> new EDMInstance(uuri),
-                "HAS-CAUSALITY", (String uuri) -> new EDMDictionaryInstance(uuri, Map.of(
-                        "HAS-CCAUSE", (String uuuri) -> new EDMInstance(uuuri),
-                        "HAS-CCONSEQUENCE", (String uuuri) -> new EDMInstance(uuuri)
-                ))));
-    }
+    private EDMSetInstance alternatives = new EDMSetInstance(EDMAlternative::new);
 
     public EDMCaseDescription() {}
-
 
     public String toString() {
         return "("
