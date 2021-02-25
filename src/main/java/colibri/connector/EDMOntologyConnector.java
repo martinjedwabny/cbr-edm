@@ -195,7 +195,7 @@ public class EDMOntologyConnector implements Connector {
         ProgressController.init(this.getClass(), "Loading concepts", ProgressController.UNKNOWN_STEPS);
 
         //Obtain instances
-        Iterator<String> caseInstances =  ob.listInstances(this.CaseMainConcept);
+        Iterator<String> caseInstances =  ob.listDeclaredInstances(this.CaseMainConcept);
         while(caseInstances.hasNext())
         {
             String caseInstance = caseInstances.next();

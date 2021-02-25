@@ -14,8 +14,8 @@ import java.util.Set;
 
 public class EDMMain {
     public static void main(String[] args) {
-//        String original = "src/main/resources/edm2.owl";
-//        String formatted = "src/main/resources/edm2-formatted.owl";
+//        String original = "src/main/resources/edm.owl";
+//        String formatted = "src/main/resources/edm-formatted.owl";
 //        EDMXMLFormatter.formatXMLNoAbbrev(original,formatted);
 
         try {

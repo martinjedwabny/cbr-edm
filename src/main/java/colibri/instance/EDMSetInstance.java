@@ -1,38 +1,41 @@
 package colibri.instance;
 
-import es.ucm.fdi.gaia.jcolibri.exception.OntologyAccessException;
 import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;
 
 import java.util.Set;
 import java.util.HashSet;
+import java.util.function.Function;
 
 public class EDMSetInstance extends EDMAbstractInstance{
 
-    private Set<EDMInstance> values;
+    private Set<EDMAbstractInstance> values;
 
-    public void setValues(Set<EDMInstance> values) {
+    private Function<String, EDMAbstractInstance> generateValue;
+
+    public void setValues(Set<EDMAbstractInstance> values) {
         this.values = values;
     }
 
-    public Set<EDMInstance> getValues() {
+    public Set<EDMAbstractInstance> getValues() {
         return this.values;
     }
 
-    public EDMSetInstance() {
+    public EDMSetInstance(Function<String, EDMAbstractInstance> generateValue) {
         this.values = new HashSet<>();
         this.shortName = "";
         this.uri = "";
+        this.generateValue = generateValue;
     }
 
-    public EDMSetInstance(Set<EDMInstance> values) {
+    public EDMSetInstance(Set<EDMAbstractInstance> values, Function<String, EDMAbstractInstance> generateValue) {
         this.values = values;
         this.shortName = "";
         this.uri = "";
+        this.generateValue = generateValue;
     }
 
-    public void fromString(String uri) throws OntologyAccessException {
-        String contentName = OntoBridgeSingleton.getOntoBridge().getShortName(uri);
-        this.values.add(new EDMInstance(contentName));
+    public void fromString(String uri) {
+        this.values.add(this.generateValue.apply(uri));
     }
 
     public String toString() {

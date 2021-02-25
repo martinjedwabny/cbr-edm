@@ -1,6 +1,4 @@
 import colibri.connector.EDMOntologyConnector;
-import colibri.instance.EDMKeySetInstance;
-import colibri.instance.EDMSetInstance;
 import colibri.similarity.EDMKeySetGreedy;
 import colibri.similarity.EDMOntDeep;
 import colibri.similarity.EDMSetGreedy;
@@ -12,17 +10,11 @@ import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNConfig;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNScoringMethod;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.global.Average;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.local.Equal;
-import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.local.ontology.OntCosine;
-import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.local.ontology.OntDeep;
-import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.local.ontology.OntDeepBasic;
-import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.local.ontology.OntDetail;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.RetrievalResult;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.selection.SelectCases;
 import es.ucm.fdi.gaia.jcolibri.util.FileIO;
 
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
 
 public class EDMCaseSolver implements StandardCBRApplication {
 
@@ -45,10 +37,8 @@ public class EDMCaseSolver implements StandardCBRApplication {
     // Loads cases into _caseBase object and prints them
     public CBRCaseBase preCycle() throws ExecutionException {
         this._caseBase.init(this._connector);
-        Iterator var1 = this._caseBase.getCases().iterator();
 
-        while(var1.hasNext()) {
-            CBRCase c = (CBRCase)var1.next();
+        for (CBRCase c : this._caseBase.getCases()) {
             System.out.println(c);
         }
 
@@ -90,9 +80,7 @@ public class EDMCaseSolver implements StandardCBRApplication {
         Collection<RetrievalResult> eval = NNScoringMethod.evaluateSimilarity(this._caseBase.getCases(), query, simConfig);
         eval = SelectCases.selectTopKRR(eval, 10);
         System.out.println("Retrieved cases:");
-        Iterator var4 = eval.iterator();
-        while(var4.hasNext()) {
-            RetrievalResult nse = (RetrievalResult)var4.next();
+        for (RetrievalResult nse : eval) {
             System.out.println(nse);
         }
     }

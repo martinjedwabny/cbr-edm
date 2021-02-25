@@ -1,12 +1,10 @@
 package colibri.instance;
 
-import es.ucm.fdi.gaia.jcolibri.exception.OntologyAccessException;
-
 public class EDMInstance extends EDMAbstractInstance {
 
     public EDMInstance(){}
 
-    public EDMInstance(String uri) throws OntologyAccessException{
+    public EDMInstance(String uri){
         fromString(uri);
     }
 
@@ -19,6 +17,6 @@ public class EDMInstance extends EDMAbstractInstance {
     }
 
     public boolean equals(Object other) {
-        return (other instanceof EDMInstance) && this.shortName.equals(((EDMInstance) other).uri);
+        return (other instanceof EDMInstance) && this.shortName.equals(((EDMInstance) other).shortName);
     }
 }
