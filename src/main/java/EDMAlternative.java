@@ -19,6 +19,15 @@ public class EDMAlternative extends EDMAbstractInstance {
 
     public EDMAlternative() {}
 
+    public EDMAlternative(Set<String> consequences,Set<String> features,Set<Pair> causalities) {
+        this.consequences = new HashSet<>();
+        this.features = new HashSet<>();
+        this.causalities = new HashSet<>();
+        if (consequences != null)for (String s : consequences) this.consequences.add(new EDMInstance(s));
+        if (features != null) for (String s : features) this.features.add(new EDMInstance(s));
+        if (causalities != null) for (Pair p : causalities) this.causalities.add(new EDMCausality(new EDMInstance(p.first.toString()), new EDMInstance(p.second.toString())));
+    }
+
     public EDMAlternative(String uri) {
         this.fromString(uri);
     }

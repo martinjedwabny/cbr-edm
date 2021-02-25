@@ -3,10 +3,14 @@
 // (powered by FernFlower decompiler)
 //
 
+import colibri.instance.EDMAbstractInstance;
 import colibri.instance.EDMSetInstance;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.Attribute;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CaseComponent;
 import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;
+import org.mindswap.pellet.utils.Pair;
+
+import java.util.Set;
 
 public class EDMCaseDescription implements CaseComponent {
 
@@ -15,6 +19,15 @@ public class EDMCaseDescription implements CaseComponent {
     private EDMSetInstance alternatives = new EDMSetInstance(EDMAlternative::new);
 
     public EDMCaseDescription() {}
+
+    public EDMCaseDescription(Set<String> consequencesInaction, Set<String> consequencesAction,
+                              Set<String> featuresInaction, Set<String> featuresAction,
+                              Set<Pair> causalitiesInaction, Set<Pair> causalitiesAction) {
+        this.alternatives = new EDMSetInstance(Set.of(
+                new EDMAlternative(consequencesInaction, featuresInaction, causalitiesInaction),
+                new EDMAlternative(consequencesAction, featuresAction, causalitiesAction)
+        ));
+    }
 
     public String toString() {
         return "("

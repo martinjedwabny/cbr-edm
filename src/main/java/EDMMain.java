@@ -3,10 +3,10 @@ import colibri.instance.EDMInstance;
 import colibri.similarity.EDMOntDeep;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRQuery;
 import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
-import gate.util.Pair;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.mindswap.pellet.utils.Pair;
 
 import java.util.Collections;
 import java.util.List;
@@ -28,20 +28,20 @@ public class EDMMain {
             /*
             2. Create query with custom values
              */
-//            EDMCaseDescription queryDesc = new EDMCaseDescription(
-//                    Set.of("save1","kill5"),
-//                    Set.of("kill1", "save5"),
-//                    null,
-//                    Set.of("personalForce"),
-//                    null,
-//                    Set.of( new Pair("kill1","save5")));
-//            CBRQuery query = new CBRQuery();
-//            query.setDescription(queryDesc);
+            EDMCaseDescription queryDesc = new EDMCaseDescription(
+                    Set.of("save1","kill5"),
+                    Set.of("kill1", "save5"),
+                    null,
+                    Set.of("personalForce"),
+                    null,
+                    Set.of( new Pair("kill1","save5")));
+            CBRQuery query = new CBRQuery();
+            query.setDescription(queryDesc);
 //            /*
 //            3. Run query
 //             */
-//            cbr.cycle(query);
-//            cbr.postCycle();
+            cbr.cycle(query);
+            cbr.postCycle();
 //            System.out.println("Sim: "+new EDMOntDeep().compute(new EDMInstance("http://gaia.fdi.ucm.es/ontologies/vacation.owl#infectMany"), new EDMInstance("http://gaia.fdi.ucm.es/ontologies/vacation.owl#kill1")));
 //            System.out.println("Sim: "+new EDMOntDeep().compute(new EDMInstance("http://gaia.fdi.ucm.es/ontologies/vacation.owl#kill5"), new EDMInstance("http://gaia.fdi.ucm.es/ontologies/vacation.owl#kill1")));
 //            System.out.println("Sim: "+new EDMOntDeep().compute(new EDMInstance("http://gaia.fdi.ucm.es/ontologies/vacation.owl#kill1"), new EDMInstance("http://gaia.fdi.ucm.es/ontologies/vacation.owl#kill1")));

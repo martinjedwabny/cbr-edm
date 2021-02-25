@@ -1,7 +1,5 @@
 package colibri.instance;
 
-import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;
-
 import java.util.Set;
 import java.util.HashSet;
 import java.util.function.Function;
@@ -18,6 +16,13 @@ public class EDMSetInstance extends EDMAbstractInstance{
 
     public Set<EDMAbstractInstance> getValues() {
         return this.values;
+    }
+
+    public EDMSetInstance(Set<EDMAbstractInstance> values) {
+        this.values = values;
+        this.shortName = "";
+        this.uri = "";
+        this.generateValue = EDMInstance::new;
     }
 
     public EDMSetInstance(Function<String, EDMAbstractInstance> generateValue) {

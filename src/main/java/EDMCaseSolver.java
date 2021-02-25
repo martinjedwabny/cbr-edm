@@ -60,12 +60,7 @@ public class EDMCaseSolver implements StandardCBRApplication {
         3. An 'Attribute' stores a name/id and a class,
         4. 'addMapping' stores an 'Attribute -> LocalSimilarityFunction in the simConfig object
          */
-        simConfig.addMapping(new Attribute("hasConsequenceInaction", EDMCaseDescription.class), new EDMSetGreedy(new EDMOntDeep()));
-        simConfig.addMapping(new Attribute("hasConsequenceAction", EDMCaseDescription.class), new EDMSetGreedy(new EDMOntDeep()));
-        simConfig.addMapping(new Attribute("hasFeaturesAction", EDMCaseDescription.class), new EDMSetGreedy(new EDMOntDeep()));
-        simConfig.addMapping(new Attribute("hasFeaturesInaction", EDMCaseDescription.class), new EDMSetGreedy(new EDMOntDeep()));
-        simConfig.addMapping(new Attribute("hasCausalityAction", EDMCaseDescription.class), new EDMKeySetGreedy(new Equal()));
-        simConfig.addMapping(new Attribute("hasCausalityInaction", EDMCaseDescription.class), new EDMKeySetGreedy(new Equal()));
+        simConfig.addMapping(new Attribute("alternatives", EDMCaseDescription.class), new EDMSetGreedy(new EDMOntDeep()));
 
         /*
         5. Print query, retrieve 10 most similar cases and print them
@@ -77,12 +72,12 @@ public class EDMCaseSolver implements StandardCBRApplication {
         6. 'eval' object collects the top 10 results using the 'simConfig' object
             obtained using NNScoringMethod.evaluateSimilarity function
          */
-        Collection<RetrievalResult> eval = NNScoringMethod.evaluateSimilarity(this._caseBase.getCases(), query, simConfig);
-        eval = SelectCases.selectTopKRR(eval, 10);
-        System.out.println("Retrieved cases:");
-        for (RetrievalResult nse : eval) {
-            System.out.println(nse);
-        }
+//        Collection<RetrievalResult> eval = NNScoringMethod.evaluateSimilarity(this._caseBase.getCases(), query, simConfig);
+//        eval = SelectCases.selectTopKRR(eval, 10);
+//        System.out.println("Retrieved cases:");
+//        for (RetrievalResult nse : eval) {
+//            System.out.println(nse);
+//        }
     }
 
     public void postCycle() throws ExecutionException {
