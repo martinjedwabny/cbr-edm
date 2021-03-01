@@ -37,6 +37,7 @@ public class EDMCaseSolver implements StandardCBRApplication {
     public CBRCaseBase preCycle() throws ExecutionException {
         this._caseBase.init(this._connector);
 
+        System.out.println("\nCase Base:");
         for (CBRCase c : this._caseBase.getCases()) {
             System.out.println(c);
         }
@@ -65,7 +66,7 @@ public class EDMCaseSolver implements StandardCBRApplication {
         /*
         5. Print query, retrieve 10 most similar cases and print them
          */
-        System.out.println("Query:");
+        System.out.println("\nQuery:");
         System.out.println(query);
         System.out.println();
         /*

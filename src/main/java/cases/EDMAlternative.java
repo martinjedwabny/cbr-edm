@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class EDMAlternative extends EDMAbstractInstance {
 
-    private Set<EDMInstance> consequences;
+    private Set<EDMConsequence> consequences;
 
     private Set<EDMInstance> features;
 
@@ -23,7 +23,7 @@ public class EDMAlternative extends EDMAbstractInstance {
         this.causalities = new HashSet<>();
         if (consequences != null)
             for (String s : consequences)
-                this.consequences.add(new EDMInstance(s));
+                this.consequences.add(new EDMConsequence(s));
         if (features != null)
             for (String s : features)
                 this.features.add(new EDMInstance(s));
@@ -45,18 +45,18 @@ public class EDMAlternative extends EDMAbstractInstance {
         this.features = new HashSet<>();
         this.causalities = new HashSet<>();
         OntoBridgeSingleton.getOntoBridge().listPropertyValue(uri,"HAS-CONSEQUENCE").forEachRemaining(
-                (String s) -> this.consequences.add(new EDMInstance(s)));
+                (String s) -> this.consequences.add(new EDMConsequence(s)));
         OntoBridgeSingleton.getOntoBridge().listPropertyValue(uri,"HAS-FEATURE").forEachRemaining(
                 (String s) -> this.features.add(new EDMInstance(s)));
         OntoBridgeSingleton.getOntoBridge().listPropertyValue(uri,"HAS-CAUSALITY").forEachRemaining(
                 (String s) -> this.causalities.add(new EDMCausality(s)));
     }
 
-    public Set<EDMInstance> getConsequences() {
+    public Set<EDMConsequence> getConsequences() {
         return consequences;
     }
 
-    public void setConsequences(Set<EDMInstance> consequences) {
+    public void setConsequences(Set<EDMConsequence> consequences) {
         this.consequences = consequences;
     }
 

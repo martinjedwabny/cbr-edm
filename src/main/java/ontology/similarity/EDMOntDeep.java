@@ -32,8 +32,8 @@ public class EDMOntDeep implements LocalSimilarityFunction {
         }
         double down;
 
-        int prof1 = ob.profInstance(i1.toString());
-        int prof2 = ob.profInstance(i2.toString());
+        int prof1 = ob.profInstance(i1.getShortName());
+        int prof2 = ob.profInstance(i2.getShortName());
         if (prof1 > prof2)
             down = prof1;
         else
