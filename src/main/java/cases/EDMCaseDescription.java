@@ -1,31 +1,27 @@
-package cases;//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
+package cases;
 
-import ontology.instance.EDMSetInstance;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.Attribute;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CaseComponent;
 import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;
-import org.mindswap.pellet.utils.Pair;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class EDMCaseDescription implements CaseComponent {
 
     private String id = "";
 
-    private EDMSetInstance alternatives = new EDMSetInstance(EDMAlternative::new);
+    private Set<EDMAlternative> alternatives;
 
-    public EDMCaseDescription() {}
+    public EDMCaseDescription(Set<EDMAlternative> alternatives) {
+        this.alternatives = alternatives;
+    }
 
-    public EDMCaseDescription(Set<String> consequencesInaction, Set<String> consequencesAction,
-                              Set<String> featuresInaction, Set<String> featuresAction,
-                              Set<Pair> causalitiesInaction, Set<Pair> causalitiesAction) {
-        this.alternatives = new EDMSetInstance(Set.of(
-                new EDMAlternative(consequencesInaction, featuresInaction, causalitiesInaction),
-                new EDMAlternative(consequencesAction, featuresAction, causalitiesAction)
-        ));
+    public EDMCaseDescription(String uri) {
+        this.setId(uri);
+        this.alternatives  = new HashSet<>();
+        OntoBridgeSingleton.getOntoBridge().listPropertyValue(uri, "HAS-ALTERNATIVE").
+                forEachRemaining((String s) -> this.alternatives.add(new EDMAlternative(s)));
     }
 
     public String toString() {
@@ -47,11 +43,11 @@ public class EDMCaseDescription implements CaseComponent {
         this.id = OntoBridgeSingleton.getOntoBridge().getShortName(id);
     }
 
-    public EDMSetInstance getAlternatives() {
+    public Set<EDMAlternative> getAlternatives() {
         return alternatives;
     }
 
-    public void setAlternatives(EDMSetInstance alternatives) {
+    public void setAlternatives(Set<EDMAlternative> alternatives) {
         this.alternatives = alternatives;
     }
 }

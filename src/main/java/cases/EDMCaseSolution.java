@@ -5,13 +5,20 @@ import es.ucm.fdi.gaia.jcolibri.cbrcore.CaseComponent;
 import ontology.instance.EDMInstance;
 import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;
 
+import java.util.Iterator;
+
 public class EDMCaseSolution implements CaseComponent {
 
     private String id = "";
 
     private EDMInstance alternative = new EDMInstance();
 
-    public EDMCaseSolution() {}
+    public EDMCaseSolution(String uri) {
+        this.setId(uri);
+        for (Iterator<String> it = OntoBridgeSingleton.getOntoBridge().listPropertyValue(uri, "HAS-SOLUTION"); it.hasNext(); ) {
+            this.alternative = new EDMInstance(it.next());
+        }
+    }
 
     public String toString() {
         return "(" + this.id + ";" + this.alternative + ")";

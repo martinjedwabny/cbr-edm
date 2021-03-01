@@ -10,19 +10,18 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import es.ucm.fdi.gaia.jcolibri.connector.TypeAdaptor;
+import cases.EDMCaseDescription;
+import cases.EDMCaseSolution;
 import org.apache.logging.log4j.LogManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import es.ucm.fdi.gaia.jcolibri.cbrcore.Attribute;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRCase;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CaseBaseFilter;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CaseComponent;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.Connector;
 import es.ucm.fdi.gaia.jcolibri.connector.ontologyutils.OntologyInfo;
-import es.ucm.fdi.gaia.jcolibri.connector.ontologyutils.OntologyMapping;
 import es.ucm.fdi.gaia.jcolibri.exception.InitializingException;
 import es.ucm.fdi.gaia.jcolibri.util.FileIO;
 import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;
@@ -32,22 +31,9 @@ import es.ucm.fdi.gaia.ontobridge.OntologyDocument;
 
 public class EDMOntologyConnector implements Connector {
 
-    private Class<?> descriptionClass;
-    private Class<?> solutionClass;
-    private Class<?> justOfSolutionClass;
-    private Class<?> resultClass;
-
-    private OntologyInfo mainOntologyInfo;
-    private ArrayList<OntologyInfo> subOntologiesInfo;
-
-    private String CaseMainConcept;
-
-    private ArrayList<OntologyMapping> descriptionMappings;
-    private ArrayList<OntologyMapping> solutionMappings;
-    private ArrayList<OntologyMapping> justOfSolutionMappings;
-    private ArrayList<OntologyMapping> resultMappings;
-
     private boolean modified;
+    private OntologyInfo mainOntologyInfo;
+    private String caseMainConcept;
 
     private OntologyInfo getOntologyInfo(Node node)
     {
@@ -64,29 +50,6 @@ public class EDMOntologyConnector implements Connector {
         return oi;
     }
 
-    private void getOntologyMappings(Node mappings, ArrayList<OntologyMapping> descriptionMappings) {
-        NodeList mappingNodes = mappings.getChildNodes();
-        for(int i=0; i<mappingNodes.getLength(); i++)
-        {
-            Node n = mappingNodes.item(i);
-            if(!n.getNodeName().equals("Map"))
-                continue;
-            OntologyMapping om = new OntologyMapping();
-            NodeList contents = n.getChildNodes();
-            for(int j=0; j<contents.getLength(); j++)
-            {
-                Node c = contents.item(j);
-                if(c.getNodeName().equals("Property"))
-                    om.setProperty(c.getTextContent());
-                else if(c.getNodeName().equals("Concept"))
-                    om.setConcept(c.getTextContent());
-                else if(c.getNodeName().equals("Attribute"))
-                    om.setAttribute(c.getTextContent());
-            }
-            descriptionMappings.add(om);
-        }
-    }
-
     /**
      * Initializes the connector from an XML config file.
      * This method reads the configuration and launches OntoBridge with the Pellet reasoner.
@@ -101,49 +64,10 @@ public class EDMOntologyConnector implements Connector {
             Document doc = db.parse(file.openStream());
 
             /* Main Ontology Info */
-            mainOntologyInfo = getOntologyInfo(doc.getElementsByTagName("MainOntology").item(0));
-
-            /* SubOntologies Info */
-            subOntologiesInfo = new ArrayList<OntologyInfo>();
-            NodeList subOntologiesNodes = doc.getElementsByTagName("SubOntology");
-            for(int i=0; i<subOntologiesNodes.getLength(); i++)
-                subOntologiesInfo.add(getOntologyInfo(subOntologiesNodes.item(i)));
+            this.mainOntologyInfo = getOntologyInfo(doc.getElementsByTagName("MainOntology").item(0));
 
             /* Case Main Concept */
-            this.CaseMainConcept = doc.getElementsByTagName("CaseMainConcept").item(0).getTextContent();
-
-
-            /* Description mapping */
-            this.descriptionClass = Class.forName(doc.getElementsByTagName("DescriptionClassName").item(0).getTextContent());
-            Node mappings = doc.getElementsByTagName("DescriptionMappings").item(0);
-            this.descriptionMappings = new ArrayList<OntologyMapping>();
-            getOntologyMappings(mappings, descriptionMappings);
-
-            /* Solution mapping */
-            try{
-                this.solutionClass =  Class.forName(doc.getElementsByTagName("SolutionClassName").item(0).getTextContent());
-                mappings = doc.getElementsByTagName("SolutionMappings").item(0);
-                this.solutionMappings = new ArrayList<OntologyMapping>();
-                getOntologyMappings(mappings, solutionMappings);
-            }catch(Exception e) {}
-
-            /* JustOfSolution mapping */
-            try{
-                this.justOfSolutionClass =  Class.forName(doc.getElementsByTagName("JustificationOfSolutionClassName").item(0).getTextContent());
-                mappings = doc.getElementsByTagName("JustificationOfSolutionMappings").item(0);
-                this.justOfSolutionMappings = new ArrayList<OntologyMapping>();
-                getOntologyMappings(mappings, justOfSolutionMappings);
-            }catch(Exception e) {}
-
-            /* result mapping */
-            try{
-                this.resultClass =  Class.forName(doc.getElementsByTagName("ResultClassName").item(0).getTextContent());
-                mappings = doc.getElementsByTagName("ResultMappings").item(0);
-                this.resultMappings = new ArrayList<OntologyMapping>();
-                getOntologyMappings(mappings, resultMappings);
-            }catch(Exception e) {}
-
-
+            this.caseMainConcept = doc.getElementsByTagName("CaseMainConcept").item(0).getTextContent();
 
             // Now let's initialize Ontobridge
 
@@ -154,18 +78,9 @@ public class EDMOntologyConnector implements Connector {
             // Setup the main ontology
             OntologyDocument mainOnto = new OntologyDocument(this.mainOntologyInfo.getUrl(),
                     FileIO.findFile(this.mainOntologyInfo.getLocalCopy()).toExternalForm());
-            // Setup subontologies
-            ArrayList<OntologyDocument> subOntologies = new ArrayList<OntologyDocument>();
-            for(OntologyInfo oi : this.subOntologiesInfo)
-            {
-                OntologyDocument subOnto = new OntologyDocument(oi.getUrl(),
-                        FileIO.findFile(oi.getLocalCopy()).toURI().toString());
-                subOntologies.add(subOnto);
-            }
 
             // Load the ontology
-            ob.loadOntology(mainOnto, subOntologies, false);
-
+            ob.loadOntology(mainOnto, List.of(), false);
 
             // Set modified to false
             this.modified = false;
@@ -192,7 +107,7 @@ public class EDMOntologyConnector implements Connector {
         ProgressController.init(this.getClass(), "Loading concepts", ProgressController.UNKNOWN_STEPS);
 
         //Obtain instances
-        Iterator<String> caseInstances =  ob.listDeclaredInstances(this.CaseMainConcept);
+        Iterator<String> caseInstances =  ob.listDeclaredInstances(this.caseMainConcept);
         while(caseInstances.hasNext())
         {
             String caseInstance = caseInstances.next();
@@ -200,33 +115,12 @@ public class EDMOntologyConnector implements Connector {
 
             try {
                 //Map description
-                CaseComponent description = (CaseComponent)this.descriptionClass.newInstance();
-                retrieveCaseComponent(ob, description, caseInstance, this.descriptionMappings);
+                CaseComponent description = retrieveCaseDescription(caseInstance);
                 _case.setDescription(description);
 
                 //Map solution
-                if(this.solutionClass != null)
-                {
-                    CaseComponent cc = (CaseComponent)this.solutionClass.newInstance();
-                    retrieveCaseComponent(ob, cc, caseInstance, this.solutionMappings);
-                    _case.setSolution(cc);
-                }
-
-                //Map justification of solution
-                if(this.justOfSolutionClass != null)
-                {
-                    CaseComponent cc = (CaseComponent)this.justOfSolutionClass.newInstance();
-                    retrieveCaseComponent(ob, cc, caseInstance, this.justOfSolutionMappings);
-                    _case.setJustificationOfSolution(cc);
-                }
-
-                //Map result solution
-                if(this.resultClass != null)
-                {
-                    CaseComponent cc = (CaseComponent)this.resultClass.newInstance();
-                    retrieveCaseComponent(ob, cc, caseInstance, this.resultMappings);
-                    _case.setResult(cc);
-                }
+                CaseComponent cc = retrieveCaseSolution(caseInstance);
+                _case.setSolution(cc);
 
                 // If everything ok add the case to the list
                 cases.add(_case);
@@ -241,31 +135,12 @@ public class EDMOntologyConnector implements Connector {
         return cases;
     }
 
-    private void retrieveCaseComponent(OntoBridge ob, CaseComponent cc, String mainInstanceName, ArrayList<OntologyMapping> mappings) throws Exception
-    {
-        //Id
-        cc.getIdAttribute().setValue(cc, mainInstanceName);
+    private CaseComponent retrieveCaseDescription(String caseInstance) {
+        return new EDMCaseDescription(caseInstance);
+    }
 
-        //Other attributes
-        for(OntologyMapping om: mappings)
-        {
-            // Obtain CaseComponent attribute
-            Attribute at = new Attribute(om.getAttribute(), cc.getClass());
-
-            // Find values of the property. It could have several values.
-            Iterator<String> values = ob.listPropertyValue(mainInstanceName, om.getProperty());
-            // Find which value is instance of the concept
-            while(values.hasNext())
-            {
-                String valueInstance = values.next();
-                if(ob.isInstanceOf(valueInstance, om.getConcept()))
-                {
-                    TypeAdaptor concept = (TypeAdaptor) at.getValue(cc);
-                    concept.fromString(valueInstance);
-                }
-            }
-        }
-
+    private CaseComponent retrieveCaseSolution(String caseInstance) {
+        return new EDMCaseSolution(caseInstance);
     }
 
     /**
@@ -296,12 +171,10 @@ public class EDMOntologyConnector implements Connector {
         for(CBRCase _case: cases)
         {
             try {
-                if(!ob.existsInstance(_case.getID().toString(),this.CaseMainConcept))
-                    ob.createInstance(this.CaseMainConcept, _case.getID().toString());
-                createCaseComponent(_case.getDescription(), this.descriptionMappings);
-                createCaseComponent(_case.getSolution(), this.solutionMappings);
-                createCaseComponent(_case.getJustificationOfSolution(), this.justOfSolutionMappings);
-                createCaseComponent(_case.getResult(), this.resultMappings);
+                if(!ob.existsInstance(_case.getID().toString(),this.caseMainConcept))
+                    ob.createInstance(this.caseMainConcept, _case.getID().toString());
+                createCaseComponent(_case.getDescription());
+                createCaseComponent(_case.getSolution());
             } catch (Exception e) {
                 LogManager.getLogger(this.getClass()).error("Error storing case: "+_case+". Cause: "+ e.getMessage());
             }
@@ -310,25 +183,24 @@ public class EDMOntologyConnector implements Connector {
         ProgressController.finish(this.getClass());
     }
 
-    private void createCaseComponent(CaseComponent cc, ArrayList<OntologyMapping> maps) throws Exception
+    private void createCaseComponent(CaseComponent cc) throws Exception
     {
-        if((cc == null)||(maps==null))
-            return;
-
-        OntoBridge ob = OntoBridgeSingleton.getOntoBridge();
-
-        String mainInstance = cc.getIdAttribute().getValue(cc).toString();
-
-        for(OntologyMapping om: maps)
-        {
-
-            Attribute at = new Attribute(om.getAttribute(), cc.getClass());
-            String instance = at.getValue(cc).toString();
-            if(!ob.existsInstance(instance,om.getConcept()))
-                ob.createInstance(om.getConcept(), instance);
-            ob.createOntProperty(mainInstance, om.getProperty(), instance);
-        }
-
+//        if(cc == null)
+//            return;
+//
+//        OntoBridge ob = OntoBridgeSingleton.getOntoBridge();
+//
+//        String mainInstance = cc.getIdAttribute().getValue(cc).toString();
+//
+//        for(OntologyMapping om: maps)
+//        {
+//
+//            Attribute at = new Attribute(om.getAttribute(), cc.getClass());
+//            String instance = at.getValue(cc).toString();
+//            if(!ob.existsInstance(instance,om.getConcept()))
+//                ob.createInstance(om.getConcept(), instance);
+//            ob.createOntProperty(mainInstance, om.getProperty(), instance);
+//        }
 
     }
 
@@ -385,21 +257,7 @@ public class EDMOntologyConnector implements Connector {
      * @return Returns the caseMainConcept.
      */
     public String getCaseMainConcept() {
-        return CaseMainConcept;
-    }
-
-    /**
-     * @return Returns the descriptionMappings.
-     */
-    public ArrayList<OntologyMapping> getDescriptionMappings() {
-        return descriptionMappings;
-    }
-
-    /**
-     * @return Returns the justOfSolutionMappings.
-     */
-    public ArrayList<OntologyMapping> getJustOfSolutionMappings() {
-        return justOfSolutionMappings;
+        return this.caseMainConcept;
     }
 
     /**
@@ -408,28 +266,5 @@ public class EDMOntologyConnector implements Connector {
     public OntologyInfo getMainOntologyInfo() {
         return mainOntologyInfo;
     }
-
-    /**
-     * @return Returns the resultMappings.
-     */
-    public ArrayList<OntologyMapping> getResultMappings() {
-        return resultMappings;
-    }
-
-    /**
-     * @return Returns the solutionMappings.
-     */
-    public ArrayList<OntologyMapping> getSolutionMappings() {
-        return solutionMappings;
-    }
-
-    /**
-     * @return Returns the subOntologiesInfo.
-     */
-    public ArrayList<OntologyInfo> getSubOntologiesInfo() {
-        return subOntologiesInfo;
-    }
-
-
 
 }

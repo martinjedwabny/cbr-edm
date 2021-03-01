@@ -4,13 +4,18 @@ import cases.EDMAlternative;
 import es.ucm.fdi.gaia.jcolibri.exception.NoApplicableSimilarityFunctionException;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.LocalSimilarityFunction;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.local.Equal;
-import ontology.instance.EDMSetInstance;
 import ontology.similarity.EDMOntDeep;
 import ontology.similarity.EDMSetGreedy;
 
-import java.util.Set;
-
 public class EDMAlternativeSimilarityFunction implements LocalSimilarityFunction {
+
+    private Double consequenceWeight, featureWeight, causalityWeight;
+
+    public EDMAlternativeSimilarityFunction(Double consequenceWeight, Double featureWeight, Double causalityWeight) {
+        this.consequenceWeight = consequenceWeight;
+        this.featureWeight = featureWeight;
+        this.causalityWeight = causalityWeight;
+    }
 
     @Override
     public double compute(Object caseObject, Object queryObject) throws NoApplicableSimilarityFunctionException {
@@ -24,11 +29,11 @@ public class EDMAlternativeSimilarityFunction implements LocalSimilarityFunction
         EDMAlternative i1 = (EDMAlternative) caseObject;
         EDMAlternative i2 = (EDMAlternative) queryObject;
 
-        Double consequenceSim = new EDMSetGreedy(new EDMOntDeep()).compute(new EDMSetInstance((Set)i1.getConsequences()), new EDMSetInstance((Set)i2.getConsequences()));
-        Double featuresSim = new EDMSetGreedy(new EDMOntDeep()).compute(new EDMSetInstance((Set)i1.getFeatures()), new EDMSetInstance((Set)i2.getFeatures()));
-        Double causalitiesSim = new EDMSetGreedy(new Equal()).compute(new EDMSetInstance((Set)i1.getCausalities()), new EDMSetInstance((Set)i2.getCausalities()));
+        Double consequenceSim = new EDMSetGreedy(new EDMOntDeep()).compute(i1.getConsequences(), i2.getConsequences());
+        Double featuresSim = new EDMSetGreedy(new EDMOntDeep()).compute(i1.getFeatures(), i2.getFeatures());
+        Double causalitiesSim = new EDMSetGreedy(new Equal()).compute(i1.getCausalities(), i2.getCausalities());
 
-        return (consequenceSim + featuresSim + causalitiesSim) / 3.0;
+        return (consequenceWeight * consequenceSim + featureWeight * featuresSim + causalityWeight * causalitiesSim) / (consequenceWeight + featureWeight + causalityWeight);
     }
 
     @Override
