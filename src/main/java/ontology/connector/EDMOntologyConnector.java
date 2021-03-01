@@ -1,7 +1,6 @@
-package colibri.connector;
+package ontology.connector;
 
 import java.io.FileWriter;
-import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,7 +10,6 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import colibri.instance.EDMInstance;
 import es.ucm.fdi.gaia.jcolibri.connector.TypeAdaptor;
 import org.apache.logging.log4j.LogManager;
 import org.w3c.dom.Document;
@@ -25,7 +23,6 @@ import es.ucm.fdi.gaia.jcolibri.cbrcore.CaseComponent;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.Connector;
 import es.ucm.fdi.gaia.jcolibri.connector.ontologyutils.OntologyInfo;
 import es.ucm.fdi.gaia.jcolibri.connector.ontologyutils.OntologyMapping;
-import es.ucm.fdi.gaia.jcolibri.datatypes.Instance;
 import es.ucm.fdi.gaia.jcolibri.exception.InitializingException;
 import es.ucm.fdi.gaia.jcolibri.util.FileIO;
 import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;

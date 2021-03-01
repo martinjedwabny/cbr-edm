@@ -1,7 +1,8 @@
+package cases;
 
 import es.ucm.fdi.gaia.jcolibri.cbrcore.Attribute;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CaseComponent;
-import colibri.instance.EDMInstance;
+import ontology.instance.EDMInstance;
 import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;
 
 public class EDMCaseSolution implements CaseComponent {

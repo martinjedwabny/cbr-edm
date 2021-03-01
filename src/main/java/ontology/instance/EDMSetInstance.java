@@ -1,4 +1,4 @@
-package colibri.instance;
+package ontology.instance;
 
 import java.util.Set;
 import java.util.HashSet;
@@ -27,13 +27,6 @@ public class EDMSetInstance extends EDMAbstractInstance{
 
     public EDMSetInstance(Function<String, EDMAbstractInstance> generateValue) {
         this.values = new HashSet<>();
-        this.shortName = "";
-        this.uri = "";
-        this.generateValue = generateValue;
-    }
-
-    public EDMSetInstance(Set<EDMAbstractInstance> values, Function<String, EDMAbstractInstance> generateValue) {
-        this.values = values;
         this.shortName = "";
         this.uri = "";
         this.generateValue = generateValue;

@@ -7,7 +7,7 @@
 
     <CaseMainConcept>EDM_CASE</CaseMainConcept>
 
-    <DescriptionClassName>EDMCaseDescription</DescriptionClassName>
+    <DescriptionClassName>cases.EDMCaseDescription</DescriptionClassName>
     <DescriptionMappings>
         <Map>
             <Property>HAS-ALTERNATIVE</Property>
@@ -16,7 +16,7 @@
         </Map>
     </DescriptionMappings>
 
-    <SolutionClassName>EDMCaseSolution</SolutionClassName>
+    <SolutionClassName>cases.EDMCaseSolution</SolutionClassName>
     <SolutionMappings>
         <Map>
             <Property>HAS-SOLUTION</Property>

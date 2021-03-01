@@ -1,18 +1,17 @@
-import colibri.connector.EDMOntologyConnector;
-import colibri.similarity.EDMKeySetGreedy;
-import colibri.similarity.EDMOntDeep;
-import colibri.similarity.EDMSetGreedy;
+import cases.EDMCaseDescription;
+import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNScoringMethod;
+import es.ucm.fdi.gaia.jcolibri.method.retrieve.RetrievalResult;
+import es.ucm.fdi.gaia.jcolibri.method.retrieve.selection.SelectCases;
+import ontology.connector.EDMOntologyConnector;
 import es.ucm.fdi.gaia.jcolibri.casebase.LinealCaseBase;
 import es.ucm.fdi.gaia.jcolibri.cbraplications.StandardCBRApplication;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.*;
 import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNConfig;
-import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNScoringMethod;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.global.Average;
-import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.local.Equal;
-import es.ucm.fdi.gaia.jcolibri.method.retrieve.RetrievalResult;
-import es.ucm.fdi.gaia.jcolibri.method.retrieve.selection.SelectCases;
 import es.ucm.fdi.gaia.jcolibri.util.FileIO;
+import ontology.similarity.EDMSetGreedy;
+import similarity.EDMAlternativeSimilarityFunction;
 
 import java.util.Collection;
 
@@ -60,7 +59,8 @@ public class EDMCaseSolver implements StandardCBRApplication {
         3. An 'Attribute' stores a name/id and a class,
         4. 'addMapping' stores an 'Attribute -> LocalSimilarityFunction in the simConfig object
          */
-        simConfig.addMapping(new Attribute("alternatives", EDMCaseDescription.class), new EDMSetGreedy(new EDMOntDeep()));
+        simConfig.addMapping(new Attribute("alternatives", EDMCaseDescription.class),
+                new EDMSetGreedy(new EDMAlternativeSimilarityFunction()));
 
         /*
         5. Print query, retrieve 10 most similar cases and print them
@@ -72,12 +72,12 @@ public class EDMCaseSolver implements StandardCBRApplication {
         6. 'eval' object collects the top 10 results using the 'simConfig' object
             obtained using NNScoringMethod.evaluateSimilarity function
          */
-//        Collection<RetrievalResult> eval = NNScoringMethod.evaluateSimilarity(this._caseBase.getCases(), query, simConfig);
-//        eval = SelectCases.selectTopKRR(eval, 10);
-//        System.out.println("Retrieved cases:");
-//        for (RetrievalResult nse : eval) {
-//            System.out.println(nse);
-//        }
+        Collection<RetrievalResult> eval = NNScoringMethod.evaluateSimilarity(this._caseBase.getCases(), query, simConfig);
+        eval = SelectCases.selectTopKRR(eval, 10);
+        System.out.println("Retrieved cases:");
+        for (RetrievalResult nse : eval) {
+            System.out.println(nse);
+        }
     }
 
     public void postCycle() throws ExecutionException {

@@ -1,10 +1,9 @@
-//
+package cases;//
 // Source code recreated from a .class file by IntelliJ IDEA
 // (powered by FernFlower decompiler)
 //
 
-import colibri.instance.EDMAbstractInstance;
-import colibri.instance.EDMSetInstance;
+import ontology.instance.EDMSetInstance;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.Attribute;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CaseComponent;
 import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;

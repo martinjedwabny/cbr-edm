@@ -1,6 +1,6 @@
-package colibri.similarity;
+package ontology.similarity;
 
-import colibri.instance.EDMInstance;
+import ontology.instance.EDMInstance;
 import es.ucm.fdi.gaia.jcolibri.exception.NoApplicableSimilarityFunctionException;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.LocalSimilarityFunction;
 import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;
@@ -24,7 +24,12 @@ public class EDMOntDeep implements LocalSimilarityFunction {
 
         OntoBridge ob = OntoBridgeSingleton.getOntoBridge();
 
-        double up = ob.maxProfLCS(i1.toString(), i2.toString());
+        double up = 0.0;
+        try {
+            up = ob.maxProfLCS(i1.toString(), i2.toString());
+        } catch (NullPointerException e) {
+//            System.out.println("Null Pointer : maxProfLCS(" + i1.toString()+", "+i2.toString()+")");
+        }
         double down;
 
         int prof1 = ob.profInstance(i1.toString());

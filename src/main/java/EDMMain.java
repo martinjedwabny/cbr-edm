@@ -1,16 +1,12 @@
-import colibri.connector.EDMXMLFormatter;
-import colibri.instance.EDMInstance;
-import colibri.similarity.EDMOntDeep;
+import cases.EDMCaseDescription;
+import com.clarkparsia.pellet.el.ELClassifier;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRQuery;
 import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.apache.log4j.Logger;
 import org.mindswap.pellet.utils.Pair;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Set;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 public class EDMMain {
     public static void main(String[] args) {

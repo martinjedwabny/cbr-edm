@@ -1,4 +1,4 @@
-package colibri.instance;
+package ontology.instance;
 
 import es.ucm.fdi.gaia.jcolibri.connector.TypeAdaptor;
 import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;

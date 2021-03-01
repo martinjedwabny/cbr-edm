@@ -1,4 +1,4 @@
-package colibri.instance;
+package ontology.instance;
 
 public class EDMInstance extends EDMAbstractInstance {
 
