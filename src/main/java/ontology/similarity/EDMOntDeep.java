@@ -26,18 +26,20 @@ public class EDMOntDeep implements LocalSimilarityFunction {
 
         double up = 0.0;
         try {
-            up = ob.maxProfLCS(i1.toString(), i2.toString());
+            up = ob.maxProfLCS(i1.getUri(), i2.getUri());
         } catch (NullPointerException e) {
-//            System.out.println("Null Pointer : maxProfLCS(" + i1.toString()+", "+i2.toString()+")");
+            System.out.println("Null Pointer : maxProfLCS(" + i1.toString()+", "+i2.toString()+")");
         }
         double down;
 
-        int prof1 = ob.profInstance(i1.getShortName());
-        int prof2 = ob.profInstance(i2.getShortName());
+        int prof1 = ob.profInstance(i1.getUri());
+        int prof2 = ob.profInstance(i2.getUri());
         if (prof1 > prof2)
             down = prof1;
         else
             down = prof2;
+
+//        System.out.println("maxProfLCS(" + i1.toString()+", "+i2.toString()+") = "+ up / down);
 
         return up / down;
     }

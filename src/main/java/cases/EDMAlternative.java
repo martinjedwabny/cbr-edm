@@ -3,7 +3,6 @@ package cases;
 import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;
 import ontology.instance.EDMAbstractInstance;
 import ontology.instance.EDMInstance;
-import org.mindswap.pellet.utils.Pair;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -17,21 +16,10 @@ public class EDMAlternative extends EDMAbstractInstance {
 
     private Set<EDMCausality> causalities;
 
-    public EDMAlternative(Set<String> consequences,Set<String> features,Set<Pair> causalities) {
-        this.consequences = new HashSet<>();
-        this.features = new HashSet<>();
-        this.causalities = new HashSet<>();
-        if (consequences != null)
-            for (String s : consequences)
-                this.consequences.add(new EDMConsequence(s));
-        if (features != null)
-            for (String s : features)
-                this.features.add(new EDMInstance(s));
-        if (causalities != null)
-            for (Pair p : causalities)
-                this.causalities.add(new EDMCausality(
-                        new EDMInstance(p.first.toString()),
-                        new EDMInstance(p.second.toString())));
+    public EDMAlternative(Set<EDMConsequence> consequences,Set<EDMInstance> features,Set<EDMCausality> causalities) {
+        this.consequences = consequences;
+        this.features = features;
+        this.causalities = causalities;
     }
 
     public EDMAlternative(String uri) {
@@ -40,7 +28,7 @@ public class EDMAlternative extends EDMAbstractInstance {
 
     @Override
     public void fromString(String uri) {
-        this.setUri(uri);
+        this.setName(uri);
         this.consequences = new HashSet<>();
         this.features = new HashSet<>();
         this.causalities = new HashSet<>();
@@ -79,7 +67,7 @@ public class EDMAlternative extends EDMAbstractInstance {
     @Override
     public String toString() {
         return "("
-                + this.shortName + ";"
+                + this.getShortName() + ";"
                 + this.consequences + ";"
                 + this.features + ";"
                 + this.causalities + ";"
@@ -88,7 +76,7 @@ public class EDMAlternative extends EDMAbstractInstance {
 
     @Override
     public int hashCode() {
-        if (this.uri != null) return super.hashCode();
-        return Objects.hash(uri, consequences, features, causalities);
+        if (this.getUri() != null) return super.hashCode();
+        return Objects.hash(this.getUri(), consequences, features, causalities);
     }
 }

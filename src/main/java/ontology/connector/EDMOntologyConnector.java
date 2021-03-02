@@ -72,9 +72,9 @@ public class EDMOntologyConnector implements Connector {
             // Now let's initialize Ontobridge
 
             // Obtain a reference to OntoBridge
-            OntoBridge ob = es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton.getOntoBridge();
+            OntoBridge ob = OntoBridgeSingleton.getOntoBridge();
             // Configure it to work with the Pellet reasoner
-            ob.initWithPelletReasoner();
+            ob.initWithOutReasoner();
             // Setup the main ontology
             OntologyDocument mainOnto = new OntologyDocument(this.mainOntologyInfo.getUrl(),
                     FileIO.findFile(this.mainOntologyInfo.getLocalCopy()).toExternalForm());
@@ -202,6 +202,11 @@ public class EDMOntologyConnector implements Connector {
 //            ob.createOntProperty(mainInstance, om.getProperty(), instance);
 //        }
 
+    }
+
+    public void createOntInstance(String instanceName, String instanceType) {
+        OntoBridge ob = OntoBridgeSingleton.getOntoBridge();
+        ob.createInstance(instanceType, instanceName);
     }
 
     /**

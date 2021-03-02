@@ -1,7 +1,10 @@
+import cases.EDMAlternative;
 import cases.EDMCaseDescription;
+import cases.EDMConsequence;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNScoringMethod;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.RetrievalResult;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.selection.SelectCases;
+import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;
 import ontology.connector.EDMOntologyConnector;
 import es.ucm.fdi.gaia.jcolibri.casebase.LinealCaseBase;
 import es.ucm.fdi.gaia.jcolibri.cbraplications.StandardCBRApplication;
@@ -10,6 +13,7 @@ import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNConfig;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.global.Average;
 import es.ucm.fdi.gaia.jcolibri.util.FileIO;
+import ontology.instance.EDMInstance;
 import ontology.similarity.EDMSetGreedy;
 import similarity.EDMAlternativeSimilarityFunction;
 
@@ -46,6 +50,7 @@ public class EDMCaseSolver implements StandardCBRApplication {
     }
 
     public void cycle(CBRQuery query) throws ExecutionException {
+        loadNewObjectsToOntology(query);
         /*
         1. NNConfig 'simConfig' : nearest neighbors object, created to compare TravelDescription objects
         2. Stores :
@@ -78,6 +83,20 @@ public class EDMCaseSolver implements StandardCBRApplication {
         System.out.println("Retrieved cases:");
         for (RetrievalResult nse : eval) {
             System.out.println(nse);
+        }
+    }
+
+    private void loadNewObjectsToOntology(CBRQuery query) {
+        EDMCaseDescription caseDescription = (EDMCaseDescription) query.getDescription();
+        for (EDMAlternative a : caseDescription.getAlternatives()) {
+            for (EDMConsequence c : a.getConsequences()) {
+                if (!OntoBridgeSingleton.getOntoBridge().existsInstance(c.getShortName()))
+                    OntoBridgeSingleton.getOntoBridge().createInstance(c.getClassName(), c.getShortName());
+            }
+            for (EDMInstance f : a.getFeatures()) {
+                if (!OntoBridgeSingleton.getOntoBridge().existsInstance(f.getShortName()))
+                    OntoBridgeSingleton.getOntoBridge().createInstance(f.getClassName(), f.getShortName());
+            }
         }
     }
 

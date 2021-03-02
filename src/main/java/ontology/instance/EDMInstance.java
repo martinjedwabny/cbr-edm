@@ -8,15 +8,20 @@ public class EDMInstance extends EDMAbstractInstance {
         fromString(uri);
     }
 
+    public EDMInstance(String shortName, String className){
+        this.setName(shortName);
+        this.setClassName(className);
+    }
+
     public void fromString(String uri) {
-        this.setUri(uri);
+        this.setName(uri);
     }
 
     public String toString() {
-        return this.shortName;
+        return this.getShortName();
     }
 
     public boolean equals(Object other) {
-        return (other instanceof EDMInstance) && this.shortName.equals(((EDMInstance) other).shortName);
+        return (other instanceof EDMInstance) && this.getShortName().equals(((EDMInstance) other).getShortName());
     }
 }

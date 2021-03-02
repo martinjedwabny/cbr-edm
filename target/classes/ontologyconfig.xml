@@ -7,23 +7,5 @@
 
     <CaseMainConcept>EDM_CASE</CaseMainConcept>
 
-    <DescriptionClassName>cases.EDMCaseDescription</DescriptionClassName>
-    <DescriptionMappings>
-        <Map>
-            <Property>HAS-ALTERNATIVE</Property>
-            <Concept>ALTERNATIVE</Concept>
-            <Attribute>alternatives</Attribute>
-        </Map>
-    </DescriptionMappings>
-
-    <SolutionClassName>cases.EDMCaseSolution</SolutionClassName>
-    <SolutionMappings>
-        <Map>
-            <Property>HAS-SOLUTION</Property>
-            <Concept>ALTERNATIVE</Concept>
-            <Attribute>alternative</Attribute>
-        </Map>
-    </SolutionMappings>
-
 
 </OntologyConfiguration>
