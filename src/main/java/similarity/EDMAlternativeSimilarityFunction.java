@@ -9,10 +9,9 @@ import ontology.similarity.EDMSetGreedy;
 
 public class EDMAlternativeSimilarityFunction implements LocalSimilarityFunction {
 
-    private Double consequenceWeight, featureWeight, causalityWeight;
+    private Double featureWeight, causalityWeight;
 
-    public EDMAlternativeSimilarityFunction(Double consequenceWeight, Double featureWeight, Double causalityWeight) {
-        this.consequenceWeight = consequenceWeight;
+    public EDMAlternativeSimilarityFunction(Double featureWeight, Double causalityWeight) {
         this.featureWeight = featureWeight;
         this.causalityWeight = causalityWeight;
     }
@@ -29,11 +28,10 @@ public class EDMAlternativeSimilarityFunction implements LocalSimilarityFunction
         EDMAlternative i1 = (EDMAlternative) caseObject;
         EDMAlternative i2 = (EDMAlternative) queryObject;
 
-        Double consequenceSim = new EDMSetGreedy(new EDMOntDeep()).compute(i1.getConsequences(), i2.getConsequences());
         Double featuresSim = new EDMSetGreedy(new EDMOntDeep()).compute(i1.getFeatures(), i2.getFeatures());
         Double causalitiesSim = new EDMSetGreedy(new Equal()).compute(i1.getCausalities(), i2.getCausalities());
 
-        return (consequenceWeight * consequenceSim + featureWeight * featuresSim + causalityWeight * causalitiesSim) / (consequenceWeight + featureWeight + causalityWeight);
+        return (featureWeight * featuresSim + causalityWeight * causalitiesSim) / (featureWeight + causalityWeight);
     }
 
     @Override

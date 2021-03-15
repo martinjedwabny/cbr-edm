@@ -1,7 +1,5 @@
 import cases.EDMAlternative;
 import cases.EDMCaseDescription;
-import cases.EDMQuantifiableConsequence;
-import cases.EDMInstance;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNScoringMethod;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.RetrievalResult;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.selection.SelectCases;
@@ -67,7 +65,7 @@ public class EDMCaseSolver implements StandardCBRApplication {
         4. 'addMapping' stores an 'Attribute -> LocalSimilarityFunction in the simConfig object
          */
         simConfig.addMapping(new Attribute("alternatives", EDMCaseDescription.class),
-                new EDMSetGreedy(new EDMAlternativeSimilarityFunction(1.0,1.0,0.5)));
+                new EDMSetGreedy(new EDMAlternativeSimilarityFunction(1.0,0.5)));
 
         /*
         5. Print query, retrieve 10 most similar cases and print them
