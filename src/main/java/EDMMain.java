@@ -24,7 +24,7 @@ public class EDMMain {
             2. Create query with custom values
              */
             EDMAlternative inaction = new EDMAlternative("inaction",
-                    Set.of( new EDMQuantifiableConsequence("save3", "SAVE", new EDMInstance("3","3","QUANTITY")),
+                    Set.of( new EDMQuantifiableConsequence("save5", "SAVE", new EDMInstance("5","5","QUANTITY")),
                             new EDMQuantifiableConsequence("kill5", "KILL")),
                     Set.of());
             EDMAlternative action = new EDMAlternative("action",

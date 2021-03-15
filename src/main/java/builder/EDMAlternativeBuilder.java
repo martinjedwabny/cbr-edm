@@ -32,7 +32,9 @@ public class EDMAlternativeBuilder extends EDMAbstractInstanceBuilder{
         EDMQuantifiableConsequenceBuilder qcBuilder = new EDMQuantifiableConsequenceBuilder();
         HashSet<EDMAbstractInstance> features = new HashSet<>();
         OntoBridgeSingleton.getOntoBridge().listPropertyValue(uri,"HAS-ALTERNATIVE-FEATURE").forEachRemaining((String s) -> {
-            if (OntoBridgeSingleton.getOntoBridge().isInstanceOf(s,"QUANTIFIABLE-CONSEQUENCE"))
+            final String[] featureClassName = {""};
+            OntoBridgeSingleton.getOntoBridge().listDeclaredBelongingClasses(s).forEachRemaining((String className) -> featureClassName[0] = className);
+            if (OntoBridgeSingleton.getOntoBridge().isSubClassOf(featureClassName[0], "QUANTIFIABLE-CONSEQUENCE"))
                 features.add(qcBuilder.build(s));
             else
                 features.add(instanceBuilder.build(s));
