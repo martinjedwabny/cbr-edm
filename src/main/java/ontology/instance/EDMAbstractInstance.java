@@ -3,11 +3,11 @@ package ontology.instance;
 public abstract class EDMAbstractInstance {
 
     public String uri;
-    public String shortName;
+    public String shortName = "";
     public String className;
 
     public int hashCode(){
-        return this.uri.hashCode();
+        return this.shortName.hashCode();
     }
 
     public String getUri() {
@@ -39,6 +39,8 @@ public abstract class EDMAbstractInstance {
     }
 
     public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
         return (other instanceof EDMAbstractInstance) && this.getShortName().equals(((EDMAbstractInstance) other).getShortName());
     }
 }

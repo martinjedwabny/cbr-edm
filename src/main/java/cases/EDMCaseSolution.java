@@ -12,7 +12,7 @@ public class EDMCaseSolution extends EDMAbstractInstance implements CaseComponen
     public EDMCaseSolution() {}
 
     public String toString() {
-        return "(" + this.shortName + ";" + this.alternative + ")";
+        return "(" + this.shortName + ":" + this.alternative + ")";
     }
 
     public Attribute getIdAttribute() {

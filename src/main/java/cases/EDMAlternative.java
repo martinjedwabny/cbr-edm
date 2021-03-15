@@ -13,7 +13,8 @@ public class EDMAlternative extends EDMAbstractInstance {
 
     public EDMAlternative() {}
 
-    public EDMAlternative(Set<EDMAbstractInstance> features, Set<EDMCausality> causalities) {
+    public EDMAlternative(String shortName, Set<EDMAbstractInstance> features, Set<EDMCausality> causalities) {
+        this.shortName = shortName;
         this.features = features;
         this.causalities = causalities;
     }
@@ -36,12 +37,21 @@ public class EDMAlternative extends EDMAbstractInstance {
 
     @Override
     public String toString() {
-        return "(" + this.getShortName() + ";" + this.features + ";" + this.causalities + ";" + ")";
+        return "(" + this.getShortName() + ":" + this.features + "," + this.causalities + ")";
     }
 
     @Override
     public int hashCode() {
-        if (this.getUri() != null) return super.hashCode();
-        return Objects.hash(this.getUri(), features, causalities);
+        if (this.getShortName() != null) return super.hashCode();
+        return Objects.hash(features, causalities);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        EDMAlternative that = (EDMAlternative) o;
+        return Objects.equals(features, that.features) && Objects.equals(causalities, that.causalities);
     }
 }

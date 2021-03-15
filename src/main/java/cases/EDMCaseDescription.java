@@ -17,10 +17,7 @@ public class EDMCaseDescription extends EDMAbstractInstance implements CaseCompo
     }
 
     public String toString() {
-        return "("
-                + this.getShortName() + ";"
-                + this.alternatives + ";"
-                + ")";
+        return "(" + this.getShortName() + ":" + this.alternatives + ")";
     }
 
     public Attribute getIdAttribute() {

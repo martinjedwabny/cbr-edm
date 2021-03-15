@@ -8,8 +8,6 @@ public class EDMQuantifiableConsequence extends EDMInstance {
 
     public EDMQuantifiableConsequence() {}
 
-    public EDMQuantifiableConsequence(EDMInstance utility) { this.utility = utility; }
-
     public EDMQuantifiableConsequence(String shortName, String className, EDMInstance utility) {
         this.setShortName(shortName);
         this.setClassName(className);
@@ -39,8 +37,7 @@ public class EDMQuantifiableConsequence extends EDMInstance {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        EDMQuantifiableConsequence that = (EDMQuantifiableConsequence) o;
-        return Objects.equals(utility, that.utility);
+        return (o instanceof EDMQuantifiableConsequence) && this.getShortName().equals(((EDMQuantifiableConsequence) o).getShortName());
     }
 
     @Override

@@ -9,4 +9,10 @@ public class EDMInstance extends EDMAbstractInstance {
         this.setShortName(shortName);
         this.setClassName(className);
     }
+
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
+        return (other instanceof EDMInstance) && this.getShortName().equals(((EDMInstance) other).getShortName());
+    }
 }
