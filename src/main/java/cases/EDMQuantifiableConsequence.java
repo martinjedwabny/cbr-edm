@@ -2,19 +2,21 @@ package cases;
 
 import java.util.Objects;
 
-public class EDMConsequence extends EDMInstance {
+public class EDMQuantifiableConsequence extends EDMInstance {
 
     private EDMInstance utility;
 
-    public EDMConsequence() {}
+    public EDMQuantifiableConsequence() {}
 
-    public EDMConsequence(String shortName, String className, EDMInstance utility) {
+    public EDMQuantifiableConsequence(EDMInstance utility) { this.utility = utility; }
+
+    public EDMQuantifiableConsequence(String shortName, String className, EDMInstance utility) {
         this.setShortName(shortName);
         this.setClassName(className);
         this.setUtility(utility);
     }
 
-    public EDMConsequence(String shortName, String className) {
+    public EDMQuantifiableConsequence(String shortName, String className) {
         this.setShortName(shortName);
         this.setClassName(className);
     }
@@ -37,7 +39,7 @@ public class EDMConsequence extends EDMInstance {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        EDMConsequence that = (EDMConsequence) o;
+        EDMQuantifiableConsequence that = (EDMQuantifiableConsequence) o;
         return Objects.equals(utility, that.utility);
     }
 

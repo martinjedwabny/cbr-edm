@@ -1,6 +1,6 @@
 import cases.EDMAlternative;
 import cases.EDMCaseDescription;
-import cases.EDMConsequence;
+import cases.EDMQuantifiableConsequence;
 import cases.EDMInstance;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNScoringMethod;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.RetrievalResult;
@@ -14,6 +14,7 @@ import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNConfig;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.global.Average;
 import es.ucm.fdi.gaia.jcolibri.util.FileIO;
+import ontology.instance.EDMAbstractInstance;
 import ontology.similarity.EDMSetGreedy;
 import similarity.EDMAlternativeSimilarityFunction;
 
@@ -89,11 +90,7 @@ public class EDMCaseSolver implements StandardCBRApplication {
     private void loadNewObjectsToOntology(CBRQuery query) {
         EDMCaseDescription caseDescription = (EDMCaseDescription) query.getDescription();
         for (EDMAlternative a : caseDescription.getAlternatives()) {
-            for (EDMConsequence c : a.getConsequences()) {
-                if (!OntoBridgeSingleton.getOntoBridge().existsInstance(c.getShortName()))
-                    OntoBridgeSingleton.getOntoBridge().createInstance(c.getClassName(), c.getShortName());
-            }
-            for (EDMInstance f : a.getFeatures()) {
+            for (EDMAbstractInstance f : a.getFeatures()) {
                 if (!OntoBridgeSingleton.getOntoBridge().existsInstance(f.getShortName()))
                     OntoBridgeSingleton.getOntoBridge().createInstance(f.getClassName(), f.getShortName());
             }
