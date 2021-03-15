@@ -10,6 +10,8 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import builder.EDMCaseDescriptionBuilder;
+import builder.EDMCaseSolutionBuilder;
 import cases.EDMCaseDescription;
 import cases.EDMCaseSolution;
 import org.apache.logging.log4j.LogManager;
@@ -135,12 +137,12 @@ public class EDMOntologyConnector implements Connector {
         return cases;
     }
 
-    private CaseComponent retrieveCaseDescription(String caseInstance) {
-        return new EDMCaseDescription(caseInstance);
+    private CaseComponent retrieveCaseDescription(String uri) {
+        return new EDMCaseDescriptionBuilder().build(uri);
     }
 
-    private CaseComponent retrieveCaseSolution(String caseInstance) {
-        return new EDMCaseSolution(caseInstance);
+    private CaseComponent retrieveCaseSolution(String uri) {
+        return new EDMCaseSolutionBuilder().build(uri);
     }
 
     /**

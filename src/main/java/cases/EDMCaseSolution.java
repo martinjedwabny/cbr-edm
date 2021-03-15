@@ -2,38 +2,29 @@ package cases;
 
 import es.ucm.fdi.gaia.jcolibri.cbrcore.Attribute;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CaseComponent;
-import ontology.instance.EDMInstance;
 import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;
+import ontology.instance.EDMAbstractInstance;
 
-import java.util.Iterator;
+public class EDMCaseSolution extends EDMAbstractInstance implements CaseComponent {
 
-public class EDMCaseSolution implements CaseComponent {
+    private EDMInstance alternative;
 
-    private String id = "";
-
-    private EDMInstance alternative = new EDMInstance();
-
-    public EDMCaseSolution(String uri) {
-        this.setId(uri);
-        for (Iterator<String> it = OntoBridgeSingleton.getOntoBridge().listPropertyValue(uri, "HAS-SOLUTION"); it.hasNext(); ) {
-            this.alternative = new EDMInstance(it.next());
-        }
-    }
+    public EDMCaseSolution() {}
 
     public String toString() {
-        return "(" + this.id + ";" + this.alternative + ")";
+        return "(" + this.shortName + ";" + this.alternative + ")";
     }
 
     public Attribute getIdAttribute() {
-        return new Attribute("id", this.getClass());
+        return new Attribute("shortName", this.getClass());
     }
 
     public String getId() {
-        return id;
+        return shortName;
     }
 
     public void setId(String id) {
-        this.id = OntoBridgeSingleton.getOntoBridge().getShortName(id);
+        this.shortName = OntoBridgeSingleton.getOntoBridge().getShortName(id);
     }
 
     public EDMInstance getAlternative() {

@@ -1,29 +1,30 @@
 package cases;
 
-import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;
-import ontology.instance.EDMInstance;
-
 import java.util.Objects;
 
 public class EDMConsequence extends EDMInstance {
 
     private EDMInstance utility;
 
-    public EDMConsequence(String shortName, String className, Integer utility) {
-        this.setName(shortName);
+    public EDMConsequence() {}
+
+    public EDMConsequence(String shortName, String className, EDMInstance utility) {
+        this.setShortName(shortName);
         this.setClassName(className);
-        this.utility = new EDMInstance(utility.toString());
+        this.setUtility(utility);
     }
 
-    public EDMConsequence(String uri) {
-        this.fromString(uri);
+    public EDMConsequence(String shortName, String className) {
+        this.setShortName(shortName);
+        this.setClassName(className);
     }
 
-    @Override
-    public void fromString(String uri){
-        this.setName(uri);
-        OntoBridgeSingleton.getOntoBridge().listPropertyValue(uri, "HAS-UTILITY").forEachRemaining(
-                (String s) -> this.utility = new EDMInstance(s));
+    public EDMInstance getUtility() {
+        return utility;
+    }
+
+    public void setUtility(EDMInstance utility) {
+        this.utility = utility;
     }
 
     @Override

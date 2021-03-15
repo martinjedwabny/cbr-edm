@@ -1,6 +1,7 @@
 import cases.EDMAlternative;
 import cases.EDMCaseDescription;
 import cases.EDMConsequence;
+import cases.EDMInstance;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNScoringMethod;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.RetrievalResult;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.selection.SelectCases;
@@ -13,7 +14,6 @@ import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNConfig;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.global.Average;
 import es.ucm.fdi.gaia.jcolibri.util.FileIO;
-import ontology.instance.EDMInstance;
 import ontology.similarity.EDMSetGreedy;
 import similarity.EDMAlternativeSimilarityFunction;
 

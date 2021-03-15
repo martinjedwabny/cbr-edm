@@ -5,7 +5,7 @@
 
     <!-- There are not subontologies -->
 
-    <CaseMainConcept>EDM_CASE</CaseMainConcept>
+    <CaseMainConcept>EDM-CASE</CaseMainConcept>
 
 
 </OntologyConfiguration>

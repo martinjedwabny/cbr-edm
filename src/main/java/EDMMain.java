@@ -1,12 +1,7 @@
-import cases.EDMAlternative;
-import cases.EDMCaseDescription;
-import cases.EDMCausality;
-import cases.EDMConsequence;
+import cases.*;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRQuery;
 import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
-import ontology.instance.EDMInstance;
 
-import java.util.Map;
 import java.util.Set;
 
 public class EDMMain {
@@ -28,15 +23,17 @@ public class EDMMain {
             2. Create query with custom values
              */
             EDMAlternative inaction = new EDMAlternative(
-                    Set.of( new EDMConsequence("save3", "HIGH-GRAVITY", 3),
-                            new EDMConsequence("kill5")),
+                    Set.of( new EDMConsequence("save3", "SAVE", new EDMInstance("3","3","QUANTITY")),
+                            new EDMConsequence("kill5", "KILL")),
                     Set.of(),
                     Set.of());
             EDMAlternative action = new EDMAlternative(
-                    Set.of( new EDMConsequence("kill1"),
-                            new EDMConsequence("save5")),
-                    Set.of(new EDMInstance("personalForce")),
-                    Set.of(new EDMCausality(new EDMConsequence("kill1"),new EDMConsequence("save5"))));
+                    Set.of( new EDMConsequence("kill1", "KILL"),
+                            new EDMConsequence("save5", "SAVE")),
+                    Set.of(new EDMInstance("personalForce","personalForce","ALTERNATIVE-FEATURE")),
+                    Set.of(new EDMCausality(
+                            new EDMConsequence("kill1", "KILL"),
+                            new EDMConsequence("save5", "SAVE"))));
             EDMCaseDescription queryDesc = new EDMCaseDescription(Set.of(inaction,action));
             CBRQuery query = new CBRQuery();
             query.setDescription(queryDesc);

@@ -1,17 +1,12 @@
 package ontology.instance;
 
-import es.ucm.fdi.gaia.jcolibri.connector.TypeAdaptor;
-import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;
+public abstract class EDMAbstractInstance {
 
-public abstract class EDMAbstractInstance implements TypeAdaptor {
-
-    private String uri;
-    private String shortName;
-    private String className;
+    public String uri;
+    public String shortName;
+    public String className;
 
     public int hashCode(){
-        if (this.uri == null)
-            this.uri = OntoBridgeSingleton.getOntoBridge().getURI(this.shortName);
         return this.uri.hashCode();
     }
 
@@ -19,19 +14,16 @@ public abstract class EDMAbstractInstance implements TypeAdaptor {
         return uri;
     }
 
-    public void setName(String name) {
-        if (name.contains("#")) {
-            this.uri = name;
-            this.shortName = OntoBridgeSingleton.getOntoBridge().getShortName(name);
-        } else {
-            this.uri = OntoBridgeSingleton.getOntoBridge().getURI(name);
-            this.shortName = name;
-        }
-        OntoBridgeSingleton.getOntoBridge().listDeclaredBelongingClasses(uri).forEachRemaining((s) -> this.className = s);
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
     public String getShortName() {
         return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
     public String getClassName() {
@@ -40,5 +32,13 @@ public abstract class EDMAbstractInstance implements TypeAdaptor {
 
     public void setClassName(String className) {
         this.className = className;
+    }
+
+    public String toString() {
+        return this.getShortName();
+    }
+
+    public boolean equals(Object other) {
+        return (other instanceof EDMAbstractInstance) && this.getShortName().equals(((EDMAbstractInstance) other).getShortName());
     }
 }
