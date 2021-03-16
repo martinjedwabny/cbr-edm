@@ -40,11 +40,11 @@ public class EDMCausality extends EDMAbstractInstance {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         EDMCausality that = (EDMCausality) o;
-        return cause.equals(that.cause) && consequence.equals(that.consequence);
+        return cause.shortName.equals(that.cause.shortName) && consequence.shortName.equals(that.consequence.shortName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cause, consequence);
+        return Objects.hash(cause.shortName, consequence.shortName);
     }
 }

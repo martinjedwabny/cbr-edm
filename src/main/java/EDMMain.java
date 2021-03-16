@@ -24,7 +24,7 @@ public class EDMMain {
             2. Create query with custom values
              */
             EDMAlternative inaction = new EDMAlternative("inaction",
-                    Set.of( new EDMQuantifiableConsequence("save5", "SAVE", new EDMInstance("5","5","QUANTITY")),
+                    Set.of( new EDMQuantifiableConsequence("save1", "SAVE"),
                             new EDMQuantifiableConsequence("kill5", "KILL")),
                     Set.of());
             EDMAlternative action = new EDMAlternative("action",
@@ -34,7 +34,7 @@ public class EDMMain {
                     Set.of(new EDMCausality(
                             new EDMQuantifiableConsequence("kill1", "KILL"),
                             new EDMQuantifiableConsequence("save5", "SAVE"))));
-            EDMCaseDescription queryDesc = new EDMCaseDescription(Set.of(inaction,action));
+            EDMCaseDescription queryDesc = new EDMCaseDescription("query", Set.of(inaction,action));
             CBRQuery query = new CBRQuery();
             query.setDescription(queryDesc);
             /*

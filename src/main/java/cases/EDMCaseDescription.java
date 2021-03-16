@@ -12,7 +12,8 @@ public class EDMCaseDescription extends EDMAbstractInstance implements CaseCompo
 
     public EDMCaseDescription() {}
 
-    public EDMCaseDescription(Set<EDMAlternative> alternatives) {
+    public EDMCaseDescription(String shortName, Set<EDMAlternative> alternatives) {
+        this.shortName = shortName;
         this.alternatives = alternatives;
     }
 
