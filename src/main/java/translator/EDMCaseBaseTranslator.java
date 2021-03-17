@@ -25,14 +25,16 @@ public class EDMCaseBaseTranslator {
         HashSet<EDMInstance> quantities = new HashSet<>();
         getPossiblyDuplicatedInstances(cases, alternatives, betterThan, features, quantifiableConsequences, quantities);
 
-        HashMap<String,String> hasSuperclass = new HashMap<>();
-        getSuperclasses(hasSuperclass, "FEATURE");
+//        HashMap<String,String> hasSuperclass = new HashMap<>();
+//        getSuperclasses(hasSuperclass, "FEATURE");
 
         StringBuilder bkBuilder = new StringBuilder();
         StringBuilder modesBuilder = new StringBuilder();
         StringBuilder examplesBuilder = new StringBuilder();
 
         getBKTranslation(alternatives, features, quantifiableConsequences, quantities, bkBuilder);
+
+//        getKBSuperclassesTranslation(hasSuperclass, bkBuilder);
 
         getExamplesTranslation(betterThan, examplesBuilder);
 
@@ -41,6 +43,11 @@ public class EDMCaseBaseTranslator {
         translationBK = bkBuilder.toString();
         translationExamples = examplesBuilder.toString();
         translationModes = modesBuilder.toString();
+    }
+
+    private void getKBSuperclassesTranslation(HashMap<String, String> hasSuperclass, StringBuilder bkBuilder) {
+        for (String subclass : hasSuperclass.keySet())
+            bkBuilder.append(hasSuperclass.get(subclass) + "(A) :- " + subclass + "(A).\n");
     }
 
     private void getModesTranslation(HashSet<EDMAbstractInstance> features, HashSet<EDMAbstractInstance> quantifiableConsequences, StringBuilder modesBuilder, Integer maxVars, Integer maxBodyClauses, Integer maxAmountClauses) {
@@ -106,6 +113,14 @@ public class EDMCaseBaseTranslator {
 
         bkBuilder.append("\n");
 
+        for (EDMAlternative alternative : alternatives) {
+            for (EDMCausality causality : alternative.getCausalities()) {
+                bkBuilder.append("causes_" + causality.getCause().getShortName() + "_" + causality.getConsequence().getShortName() + "(" + alternative.getShortName() + ").\n");
+            }
+        }
+
+        bkBuilder.append("\n");
+
         for (EDMAbstractInstance instance : quantifiableConsequences) {
             bkBuilder.append(getQuantifiableConsequenceTranslation((EDMInstance) instance));
             bkBuilder.append(getQuantifiableConsequenceNotTranslation((EDMInstance) instance));
@@ -164,8 +179,13 @@ public class EDMCaseBaseTranslator {
 
     private void getSuperclasses(HashMap<String, String> hasSuperclass, String superclass) {
         OntoBridgeSingleton.getOntoBridge().listSubClasses(superclass, true).forEachRemaining((String subclass) -> {
+            subclass = OntoBridgeSingleton.getOntoBridge().getShortName(subclass);
             hasSuperclass.put(subclass, superclass);
             getSuperclasses(hasSuperclass, subclass);
+        });
+        OntoBridgeSingleton.getOntoBridge().listInstances(superclass).forEachRemaining((String instance) -> {
+            instance = OntoBridgeSingleton.getOntoBridge().getShortName(instance);
+            hasSuperclass.put(instance, superclass);
         });
     }
 
