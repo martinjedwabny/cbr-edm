@@ -1,6 +1,6 @@
-package ontology.similarity;
+package similarity;
 
-import ontology.instance.EDMAbstractInstance;
+import cases.EDMAbstractInstance;
 import es.ucm.fdi.gaia.jcolibri.exception.NoApplicableSimilarityFunctionException;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.LocalSimilarityFunction;
 

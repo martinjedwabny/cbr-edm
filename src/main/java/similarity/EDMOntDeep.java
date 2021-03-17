@@ -1,10 +1,10 @@
-package ontology.similarity;
+package similarity;
 
 import es.ucm.fdi.gaia.jcolibri.exception.NoApplicableSimilarityFunctionException;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.LocalSimilarityFunction;
 import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;
 import es.ucm.fdi.gaia.ontobridge.OntoBridge;
-import ontology.instance.EDMAbstractInstance;
+import cases.EDMAbstractInstance;
 
 public class EDMOntDeep implements LocalSimilarityFunction {
 

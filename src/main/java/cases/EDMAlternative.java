@@ -1,7 +1,5 @@
 package cases;
 
-import ontology.instance.EDMAbstractInstance;
-
 import java.util.Objects;
 import java.util.Set;
 
@@ -12,6 +10,14 @@ public class EDMAlternative extends EDMAbstractInstance {
     private Set<EDMCausality> causalities;
 
     public EDMAlternative() {}
+
+    public EDMAlternative(String uri, String shortName, String className, Set<EDMAbstractInstance> features, Set<EDMCausality> causalities) {
+        this.uri = uri;
+        this.shortName = shortName;
+        this.className = className;
+        this.features = features;
+        this.causalities = causalities;
+    }
 
     public EDMAlternative(String shortName, Set<EDMAbstractInstance> features, Set<EDMCausality> causalities) {
         this.shortName = shortName;

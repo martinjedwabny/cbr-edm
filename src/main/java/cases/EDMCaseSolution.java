@@ -3,7 +3,6 @@ package cases;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.Attribute;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CaseComponent;
 import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;
-import ontology.instance.EDMAbstractInstance;
 
 public class EDMCaseSolution extends EDMAbstractInstance implements CaseComponent {
 

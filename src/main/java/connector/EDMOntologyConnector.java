@@ -1,4 +1,4 @@
-package ontology.connector;
+package connector;
 
 import java.io.FileWriter;
 import java.net.URL;
@@ -12,8 +12,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import builder.EDMCaseDescriptionBuilder;
 import builder.EDMCaseSolutionBuilder;
-import cases.EDMCaseDescription;
-import cases.EDMCaseSolution;
 import org.apache.logging.log4j.LogManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;

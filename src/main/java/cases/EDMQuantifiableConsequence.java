@@ -4,32 +4,31 @@ import java.util.Objects;
 
 public class EDMQuantifiableConsequence extends EDMInstance {
 
-    private EDMInstance utility;
+    private EDMInstance baseConsequence;
+
+    private EDMInstance quantity;
 
     public EDMQuantifiableConsequence() {}
 
-    public EDMQuantifiableConsequence(String shortName, String className, EDMInstance utility) {
-        this.setShortName(shortName);
-        this.setClassName(className);
-        this.setUtility(utility);
+    public EDMInstance getQuantity() {
+        return quantity;
     }
 
-    public EDMQuantifiableConsequence(String shortName, String className) {
-        this.setShortName(shortName);
-        this.setClassName(className);
+    public void setQuantity(EDMInstance quantity) {
+        this.quantity = quantity;
     }
 
-    public EDMInstance getUtility() {
-        return utility;
+    public EDMInstance getBaseConsequence() {
+        return baseConsequence;
     }
 
-    public void setUtility(EDMInstance utility) {
-        this.utility = utility;
+    public void setBaseConsequence(EDMInstance baseConsequence) {
+        this.baseConsequence = baseConsequence;
     }
 
     @Override
     public String toString() {
-        return this.getShortName() + "(" + this.utility + ")";
+        return this.getShortName() + "(" + this.quantity + ")";
     }
 
     @Override
@@ -42,6 +41,6 @@ public class EDMQuantifiableConsequence extends EDMInstance {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), utility);
+        return Objects.hash(super.hashCode(), quantity);
     }
 }

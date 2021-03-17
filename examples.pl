@@ -1,0 +1,10 @@
+pos(better(foot-inaction, foot-action)).
+neg(better(foot-action, foot-inaction)).
+pos(better(doc-inaction, doc-action)).
+neg(better(doc-action, doc-inaction)).
+pos(better(loop-action, loop-inaction)).
+neg(better(loop-inaction, loop-action)).
+pos(better(dri-action, dri-inaction)).
+neg(better(dri-inaction, dri-action)).
+pos(better(by-action, by-inaction)).
+neg(better(by-inaction, by-action)).

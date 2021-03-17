@@ -1,4 +1,4 @@
-package ontology.instance;
+package cases;
 
 public abstract class EDMAbstractInstance {
 

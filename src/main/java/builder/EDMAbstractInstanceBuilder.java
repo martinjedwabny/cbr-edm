@@ -1,12 +1,14 @@
 package builder;
 
 import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;
-import ontology.instance.EDMAbstractInstance;
+import cases.EDMAbstractInstance;
 
 import java.util.Iterator;
 
 public abstract class EDMAbstractInstanceBuilder {
+
     public abstract EDMAbstractInstance build(String uri);
+
     protected void setup(EDMAbstractInstance instance, String uri) {
         String shortName = OntoBridgeSingleton.getOntoBridge().getShortName(uri);
         String className = "";

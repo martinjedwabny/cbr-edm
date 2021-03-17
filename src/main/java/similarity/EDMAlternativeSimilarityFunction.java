@@ -4,8 +4,6 @@ import cases.EDMAlternative;
 import es.ucm.fdi.gaia.jcolibri.exception.NoApplicableSimilarityFunctionException;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.LocalSimilarityFunction;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.local.Equal;
-import ontology.similarity.EDMOntDeep;
-import ontology.similarity.EDMSetGreedy;
 
 public class EDMAlternativeSimilarityFunction implements LocalSimilarityFunction {
 

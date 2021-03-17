@@ -1,10 +1,11 @@
 import cases.EDMAlternative;
 import cases.EDMCaseDescription;
+import cases.EDMCaseSolution;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNScoringMethod;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.RetrievalResult;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.selection.SelectCases;
 import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;
-import ontology.connector.EDMOntologyConnector;
+import connector.EDMOntologyConnector;
 import es.ucm.fdi.gaia.jcolibri.casebase.LinealCaseBase;
 import es.ucm.fdi.gaia.jcolibri.cbraplications.StandardCBRApplication;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.*;
@@ -12,16 +13,18 @@ import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNConfig;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.global.Average;
 import es.ucm.fdi.gaia.jcolibri.util.FileIO;
-import ontology.instance.EDMAbstractInstance;
-import ontology.similarity.EDMSetGreedy;
+import cases.EDMAbstractInstance;
+import similarity.EDMSetGreedy;
 import similarity.EDMAlternativeSimilarityFunction;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class EDMCaseSolver implements StandardCBRApplication {
 
-    EDMOntologyConnector _connector; // Object that reads XML files
-    CBRCaseBase _caseBase; // Object that accesses CBR cases and provides indexing
+    private EDMOntologyConnector _connector; // Object that reads XML files
+    private CBRCaseBase _caseBase; // Object that accesses CBR cases and provides indexing
 
     public EDMCaseSolver() {}
 
@@ -97,5 +100,11 @@ public class EDMCaseSolver implements StandardCBRApplication {
 
     public void postCycle() throws ExecutionException {
         this._caseBase.close();
+    }
+
+    public Map<EDMCaseDescription, EDMCaseSolution> getCasesAndSolutions() {
+        HashMap<EDMCaseDescription, EDMCaseSolution> map = new HashMap();
+        this._caseBase.getCases().forEach((c) -> map.put((EDMCaseDescription)c.getDescription(), (EDMCaseSolution)c.getSolution()));
+        return map;
     }
 }

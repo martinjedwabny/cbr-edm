@@ -8,6 +8,7 @@ public class EDMQuantifiableConsequenceBuilder extends EDMAbstractInstanceBuilde
     public EDMQuantifiableConsequence build(String uri) {
         EDMQuantifiableConsequence consequence = new EDMQuantifiableConsequence();
         this.setup(consequence, uri);
+        buildBaseConsequence(uri, consequence);
         buildUtility(uri, consequence);
         return consequence;
     }
@@ -15,6 +16,12 @@ public class EDMQuantifiableConsequenceBuilder extends EDMAbstractInstanceBuilde
     private void buildUtility(String uri, EDMQuantifiableConsequence consequence) {
         EDMInstanceBuilder instanceBuilder = new EDMInstanceBuilder();
         OntoBridgeSingleton.getOntoBridge().listPropertyValue(uri, "HAS-QUANTITY").forEachRemaining(
-                (String s) -> consequence.setUtility(instanceBuilder.build(s)));
+                (String s) -> consequence.setQuantity(instanceBuilder.build(s)));
+    }
+
+    private void buildBaseConsequence(String uri, EDMQuantifiableConsequence consequence) {
+        EDMInstanceBuilder instanceBuilder = new EDMInstanceBuilder();
+        OntoBridgeSingleton.getOntoBridge().listPropertyValue(uri, "HAS-BASE-CONSEQUENCE").forEachRemaining(
+                (String s) -> consequence.setBaseConsequence(instanceBuilder.build(s)));
     }
 }

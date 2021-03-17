@@ -1,7 +1,5 @@
 package cases;
 
-import ontology.instance.EDMAbstractInstance;
-
 import java.util.Objects;
 
 public class EDMCausality extends EDMAbstractInstance {

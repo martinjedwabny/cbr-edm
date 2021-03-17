@@ -2,7 +2,6 @@ package cases;
 
 import es.ucm.fdi.gaia.jcolibri.cbrcore.Attribute;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CaseComponent;
-import ontology.instance.EDMAbstractInstance;
 
 import java.util.Set;
 

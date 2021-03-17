@@ -1,4 +1,4 @@
-package ontology.connector;
+package connector;
 
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
