@@ -45,6 +45,7 @@ not_personalForce(A) :- alternative(A), not(hasFeature(A, personalForce)).
 causes_kill_save(doc-action).
 causes_kill_save(loop-action).
 causes_kill_save(foot-action).
+not_causes_kill_save(A) :- alternative(A), not(causes_kill_save(A)).
 
 save(A, Q) :- alternative(A), quantity(Q), hasFeature(A, save, Q).
 save(A, 0) :- alternative(A), not((quantity(Q), hasFeature(A, save, Q))).

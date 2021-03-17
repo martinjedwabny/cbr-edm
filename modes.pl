@@ -24,3 +24,9 @@ modeb(infectMore, 2).
 type(infect, 0, element).
 type(infect, 1, element).
 
+modeb(causes_kill_save, 1).
+type(causes_kill_save, 0, element).
+
+modeb(not_causes_kill_save, 1).
+type(not_causes_kill_save, 0, element).
+

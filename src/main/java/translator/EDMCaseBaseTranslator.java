@@ -23,7 +23,8 @@ public class EDMCaseBaseTranslator {
         HashSet<EDMAbstractInstance> features = new HashSet<>();
         HashSet<EDMAbstractInstance> quantifiableConsequences = new HashSet<>();
         HashSet<EDMInstance> quantities = new HashSet<>();
-        getPossiblyDuplicatedInstances(cases, alternatives, betterThan, features, quantifiableConsequences, quantities);
+        HashMap<EDMCausality, HashSet<EDMAlternative>> causalities = new HashMap<>();
+        getPossiblyDuplicatedInstances(cases, alternatives, betterThan, features, quantifiableConsequences, quantities, causalities);
 
 //        HashMap<String,String> hasSuperclass = new HashMap<>();
 //        getSuperclasses(hasSuperclass, "FEATURE");
@@ -32,13 +33,13 @@ public class EDMCaseBaseTranslator {
         StringBuilder modesBuilder = new StringBuilder();
         StringBuilder examplesBuilder = new StringBuilder();
 
-        getBKTranslation(alternatives, features, quantifiableConsequences, quantities, bkBuilder);
+        getBKTranslation(alternatives, features, quantifiableConsequences, quantities, causalities, bkBuilder);
 
 //        getKBSuperclassesTranslation(hasSuperclass, bkBuilder);
 
         getExamplesTranslation(betterThan, examplesBuilder);
 
-        getModesTranslation(features, quantifiableConsequences, modesBuilder, maxVars, maxBodyClauses, maxAmountClauses);
+        getModesTranslation(features, quantifiableConsequences, causalities, modesBuilder, maxVars, maxBodyClauses, maxAmountClauses);
 
         translationBK = bkBuilder.toString();
         translationExamples = examplesBuilder.toString();
@@ -50,7 +51,7 @@ public class EDMCaseBaseTranslator {
             bkBuilder.append(hasSuperclass.get(subclass) + "(A) :- " + subclass + "(A).\n");
     }
 
-    private void getModesTranslation(HashSet<EDMAbstractInstance> features, HashSet<EDMAbstractInstance> quantifiableConsequences, StringBuilder modesBuilder, Integer maxVars, Integer maxBodyClauses, Integer maxAmountClauses) {
+    private void getModesTranslation(HashSet<EDMAbstractInstance> features, HashSet<EDMAbstractInstance> quantifiableConsequences, HashMap<EDMCausality, HashSet<EDMAlternative>> causalities, StringBuilder modesBuilder, Integer maxVars, Integer maxBodyClauses, Integer maxAmountClauses) {
         modesBuilder.append("max_vars(" + maxVars.toString() + ").\n");
         modesBuilder.append("max_body(" + maxBodyClauses.toString() + ").\n");
         modesBuilder.append("max_clauses(" + maxAmountClauses.toString() + ").\n\n");
@@ -71,9 +72,16 @@ public class EDMCaseBaseTranslator {
             modesBuilder.append("type(" + instance.getShortName() + ", 0, element).\n");
             modesBuilder.append("type(" + instance.getShortName() + ", 1, element).\n\n");
         }
+
+        for (EDMCausality causality : causalities.keySet()) {
+            modesBuilder.append("modeb(" + getCausalityName(causality) + ", 1).\n");
+            modesBuilder.append("type(" + getCausalityName(causality) + ", 0, element).\n\n");
+            modesBuilder.append("modeb(not_" + getCausalityName(causality) + ", 1).\n");
+            modesBuilder.append("type(not_" + getCausalityName(causality) + ", 0, element).\n\n");
+        }
     }
 
-    private void getBKTranslation(HashSet<EDMAlternative> alternatives, HashSet<EDMAbstractInstance> features, HashSet<EDMAbstractInstance> quantifiableConsequences, HashSet<EDMInstance> quantities, StringBuilder bkBuilder) {
+    private void getBKTranslation(HashSet<EDMAlternative> alternatives, HashSet<EDMAbstractInstance> features, HashSet<EDMAbstractInstance> quantifiableConsequences, HashSet<EDMInstance> quantities, HashMap<EDMCausality, HashSet<EDMAlternative>> causalities, StringBuilder bkBuilder) {
         for (EDMAlternative alternative : alternatives) {
             bkBuilder.append(getAlternativeTranslation(alternative));
         }
@@ -113,10 +121,12 @@ public class EDMCaseBaseTranslator {
 
         bkBuilder.append("\n");
 
-        for (EDMAlternative alternative : alternatives) {
-            for (EDMCausality causality : alternative.getCausalities()) {
-                bkBuilder.append("causes_" + causality.getCause().getShortName() + "_" + causality.getConsequence().getShortName() + "(" + alternative.getShortName() + ").\n");
+        for (EDMCausality causality : causalities.keySet()) {
+            String causalityName = getCausalityName(causality);
+            for (EDMAlternative alternative : causalities.get(causality)) {
+                bkBuilder.append(causalityName + "(" + alternative.getShortName() + ").\n");
             }
+            bkBuilder.append("not_" + causalityName + "(A) :- alternative(A), not(" + causalityName + "(A)).\n");
         }
 
         bkBuilder.append("\n");
@@ -130,6 +140,10 @@ public class EDMCaseBaseTranslator {
         bkBuilder.append("\n");
 
         bkBuilder.append("greater(QA,QB) :- integer(QA), integer(QB), QA > QB.\n");
+    }
+
+    private String getCausalityName(EDMCausality causality) {
+        return "causes_" + causality.getCause().getShortName() + "_" + causality.getConsequence().getShortName();
     }
 
     private void getExamplesTranslation(HashMap<EDMInstance, HashSet<EDMAlternative>> betterThan, StringBuilder examplesBuilder) {
@@ -189,7 +203,7 @@ public class EDMCaseBaseTranslator {
         });
     }
 
-    private void getPossiblyDuplicatedInstances(Map<EDMCaseDescription, EDMCaseSolution> cases, HashSet<EDMAlternative> alternatives, HashMap<EDMInstance, HashSet<EDMAlternative>> betterThan, HashSet<EDMAbstractInstance> features, HashSet<EDMAbstractInstance> quantifiableConsequences, HashSet<EDMInstance> quantities) {
+    private void getPossiblyDuplicatedInstances(Map<EDMCaseDescription, EDMCaseSolution> cases, HashSet<EDMAlternative> alternatives, HashMap<EDMInstance, HashSet<EDMAlternative>> betterThan, HashSet<EDMAbstractInstance> features, HashSet<EDMAbstractInstance> quantifiableConsequences, HashSet<EDMInstance> quantities, HashMap<EDMCausality, HashSet<EDMAlternative>> causalities) {
         for (EDMCaseDescription description : cases.keySet()) {
             EDMCaseSolution solution = cases.get(description);
             for (EDMAlternative alternative : description.getAlternatives()) {
@@ -206,6 +220,12 @@ public class EDMCaseBaseTranslator {
                         features.add(feature);
                     }
                 }
+            }
+        }
+        for (EDMAlternative alternative : alternatives) {
+            for (EDMCausality causality : alternative.getCausalities()) {
+                causalities.putIfAbsent(causality, new HashSet<>());
+                causalities.get(causality).add(alternative);
             }
         }
     }
