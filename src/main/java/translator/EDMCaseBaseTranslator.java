@@ -13,7 +13,7 @@ public class EDMCaseBaseTranslator {
     private String translationModes = "";
     private String translationExamples = "";
 
-    private Integer maxVars = 3;
+    private Integer maxVars = 2;
     private Integer maxBodyClauses = 3;
     private Integer maxAmountClauses = 3;
 
@@ -222,12 +222,12 @@ public class EDMCaseBaseTranslator {
                 }
             }
         }
-        for (EDMAlternative alternative : alternatives) {
-            for (EDMCausality causality : alternative.getCausalities()) {
-                causalities.putIfAbsent(causality, new HashSet<>());
-                causalities.get(causality).add(alternative);
-            }
-        }
+//        for (EDMAlternative alternative : alternatives) {
+//            for (EDMCausality causality : alternative.getCausalities()) {
+//                causalities.putIfAbsent(causality, new HashSet<>());
+//                causalities.get(causality).add(alternative);
+//            }
+//        }
     }
 
     public String getTranslationBK() {

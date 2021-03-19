@@ -1,6 +1,7 @@
 import cases.*;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRQuery;
 import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
+import ilp.EDMILPSolver;
 import translator.EDMCaseBaseTranslator;
 
 import java.io.BufferedWriter;
@@ -48,15 +49,8 @@ public class EDMMain {
 //            cbr.postCycle();
             EDMCaseBaseTranslator translator = new EDMCaseBaseTranslator();
             translator.translate(cbr.getCasesAndSolutions());
-            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("bk.pl"), "utf-8"))) {
-                writer.write(translator.getTranslationBK());
-            }
-            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("modes.pl"), "utf-8"))) {
-                writer.write(translator.getTranslationModes());
-            }
-            try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("examples.pl"), "utf-8"))) {
-                writer.write(translator.getTranslationExamples());
-            }
+            EDMILPSolver ilpSolver = new EDMILPSolver(translator.getTranslationBK(), translator.getTranslationModes(), translator.getTranslationExamples());
+            ilpSolver.solveAndSave("out.txt");
         } catch (ExecutionException var12) {
             System.out.println(var12.getMessage());
             var12.printStackTrace();
