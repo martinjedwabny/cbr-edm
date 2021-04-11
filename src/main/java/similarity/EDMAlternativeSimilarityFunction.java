@@ -7,13 +7,6 @@ import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.local.Equ
 
 public class EDMAlternativeSimilarityFunction implements LocalSimilarityFunction {
 
-    private Double featureWeight, causalityWeight;
-
-    public EDMAlternativeSimilarityFunction(Double featureWeight, Double causalityWeight) {
-        this.featureWeight = featureWeight;
-        this.causalityWeight = causalityWeight;
-    }
-
     @Override
     public double compute(Object caseObject, Object queryObject) throws NoApplicableSimilarityFunctionException {
         if ((caseObject == null) || (queryObject == null))
@@ -27,9 +20,8 @@ public class EDMAlternativeSimilarityFunction implements LocalSimilarityFunction
         EDMAlternative i2 = (EDMAlternative) queryObject;
 
         Double featuresSim = new EDMSetGreedy(new EDMOntDeep()).compute(i1.getFeatures(), i2.getFeatures());
-        Double causalitiesSim = new EDMSetGreedy(new Equal()).compute(i1.getCausalities(), i2.getCausalities());
 
-        return (featureWeight * featuresSim + causalityWeight * causalitiesSim) / (featureWeight + causalityWeight);
+        return featuresSim;
     }
 
     @Override

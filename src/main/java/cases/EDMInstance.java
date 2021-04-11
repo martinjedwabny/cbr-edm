@@ -2,6 +2,7 @@ package cases;
 
 public class EDMInstance extends EDMAbstractInstance {
     public EDMInstance (){}
+
     public EDMInstance(String uri, String shortName, String className) {
         this.setUri(uri);
         this.setShortName(shortName);

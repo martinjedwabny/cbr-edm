@@ -4,19 +4,24 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 public class EDMILPSolver {
     private String backgroundKnowledge = "";
     private String modes = "";
     private String examples = "";
+    private ArrayList<String> result;
 
-    public EDMILPSolver(String backgroundKnowledge, String modes, String examples) {
+    public EDMILPSolver () {}
+
+    public ArrayList<String> getResult() {
+        return result;
+    }
+
+    public void solve(String backgroundKnowledge, String modes, String examples) throws Exception {
         this.backgroundKnowledge = backgroundKnowledge;
         this.modes = modes;
         this.examples = examples;
-    }
-
-    public void solveAndSave(String outputFilePath) throws Exception {
         File bkFile = createTemporaryFile("bk-", ".pl", this.backgroundKnowledge);
         File modesFile = createTemporaryFile("modes-", ".pl", this.modes);
         File examplesFile = createTemporaryFile("examples-", ".pl", this.examples);
@@ -27,15 +32,10 @@ public class EDMILPSolver {
     private void runILPSolver(String command) throws IOException {
         Process p = Runtime.getRuntime().exec(command);
         BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-        System.out.println("Here is the standard output of the command:\n");
+        this.result = new ArrayList<>();
         String s = null;
         while ((s = stdInput.readLine()) != null) {
-            System.out.println(s);
-        }
-        System.out.println("Here is the standard error of the command (if any):\n");
-        while ((s = stdError.readLine()) != null) {
-            System.out.println(s);
+            result.add(s);
         }
     }
 

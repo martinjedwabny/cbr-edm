@@ -1,14 +1,5 @@
-import cases.*;
-import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRQuery;
+import connector.EDMXMLFormatter;
 import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
-import ilp.EDMILPSolver;
-import translator.EDMCaseBaseTranslator;
-
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.Set;
 
 public class EDMMain {
     public static void main(String[] args) {
@@ -16,7 +7,6 @@ public class EDMMain {
 //        String original = "src/main/resources/edm.owl";
 //        String formatted = "src/main/resources/edm-formatted.owl";
 //        EDMXMLFormatter.formatXMLNoAbbrev(original,formatted);
-
 
         try {
             /*
@@ -47,10 +37,16 @@ public class EDMMain {
 //             */
 //            cbr.cycle(query);
 //            cbr.postCycle();
-            EDMCaseBaseTranslator translator = new EDMCaseBaseTranslator();
-            translator.translate(cbr.getCasesAndSolutions());
-            EDMILPSolver ilpSolver = new EDMILPSolver(translator.getTranslationBK(), translator.getTranslationModes(), translator.getTranslationExamples());
-            ilpSolver.solveAndSave("out.txt");
+//            EDMCaseBaseDirectTranslator translator = new EDMCaseBaseDirectTranslator();
+//            translator.translate(cbr.getCasesAndSolutions());
+//            System.out.println(translator);
+//            EDMILPSolver ilpSolver = new EDMILPSolver();
+//            long time = System.nanoTime();
+//            ilpSolver.solve(translator.getTranslationBK(), translator.getTranslationModes(), translator.getTranslationExamples());
+//            double elapsedTimeInSecond = (double) (System.nanoTime() - time) / 1_000_000_000;
+//            System.out.println("\nPopper result (" + String.format("%.2f", elapsedTimeInSecond) + " seconds):");
+//            for (String s : ilpSolver.getResult())
+//                System.out.println(s);
         } catch (ExecutionException var12) {
             System.out.println(var12.getMessage());
             var12.printStackTrace();

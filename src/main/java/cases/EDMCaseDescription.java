@@ -9,15 +9,18 @@ public class EDMCaseDescription extends EDMAbstractInstance implements CaseCompo
 
     private Set<EDMAlternative> alternatives;
 
+    private Set<EDMInstance> situationFeatures;
+
     public EDMCaseDescription() {}
 
-    public EDMCaseDescription(String shortName, Set<EDMAlternative> alternatives) {
+    public EDMCaseDescription(String shortName, Set<EDMAlternative> alternatives, Set<EDMInstance> situationFeatures) {
         this.shortName = shortName;
         this.alternatives = alternatives;
+        this.situationFeatures = situationFeatures;
     }
 
     public String toString() {
-        return "(" + this.getShortName() + ":" + this.alternatives + ")";
+        return "(" + this.getShortName() + ":" + this.alternatives + ":" + this.situationFeatures + ")";
     }
 
     public Attribute getIdAttribute() {
@@ -30,6 +33,14 @@ public class EDMCaseDescription extends EDMAbstractInstance implements CaseCompo
 
     public void setAlternatives(Set<EDMAlternative> alternatives) {
         this.alternatives = alternatives;
+    }
+
+    public Set<EDMInstance> getSituationFeatures() {
+        return situationFeatures;
+    }
+
+    public void setSituationFeatures(Set<EDMInstance> situationFeatures) {
+        this.situationFeatures = situationFeatures;
     }
 }
 

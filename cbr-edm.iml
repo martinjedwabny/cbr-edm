@@ -83,6 +83,5 @@
     <orderEntry type="library" name="Maven: stax:stax-api:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.lucene:lucene-core:2.3.1" level="project" />
     <orderEntry type="library" name="Maven: junit:junit:4.5" level="project" />
-    <orderEntry type="library" name="Maven: org.python:jython-standalone:2.7.2" level="project" />
   </component>
 </module>
