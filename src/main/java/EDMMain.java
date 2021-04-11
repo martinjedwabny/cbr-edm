@@ -1,5 +1,7 @@
 import connector.EDMXMLFormatter;
 import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
+import ilp.EDMILPSolver;
+import translator.EDMCaseBaseDirectTranslator;
 
 public class EDMMain {
     public static void main(String[] args) {
@@ -37,9 +39,9 @@ public class EDMMain {
 //             */
 //            cbr.cycle(query);
 //            cbr.postCycle();
-//            EDMCaseBaseDirectTranslator translator = new EDMCaseBaseDirectTranslator();
-//            translator.translate(cbr.getCasesAndSolutions());
-//            System.out.println(translator);
+            EDMCaseBaseDirectTranslator translator = new EDMCaseBaseDirectTranslator();
+            translator.translate(cbr.getCasesAndSolutions(), cbr.getDutyMappings());
+            System.out.println(translator);
 //            EDMILPSolver ilpSolver = new EDMILPSolver();
 //            long time = System.nanoTime();
 //            ilpSolver.solve(translator.getTranslationBK(), translator.getTranslationModes(), translator.getTranslationExamples());
