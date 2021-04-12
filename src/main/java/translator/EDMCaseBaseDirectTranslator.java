@@ -21,6 +21,12 @@ public class EDMCaseBaseDirectTranslator {
     private Integer maxBodyClauses = 3;
     private Integer maxAmountClauses = 3;
 
+    public EDMCaseBaseDirectTranslator(Integer maxVars, Integer maxBodyClauses, Integer maxAmountClauses) {
+        this.maxVars = maxVars;
+        this.maxBodyClauses = maxBodyClauses;
+        this.maxAmountClauses = maxAmountClauses;
+    }
+
     private Set<Set<EDMAlternative>> alternatives = new HashSet<>();
     private HashMap<EDMInstance, HashSet<EDMAlternative>> betterThan = new HashMap<>();
     private HashSet<EDMAbstractInstance> duties = new HashSet<>();
@@ -76,17 +82,17 @@ public class EDMCaseBaseDirectTranslator {
                         EDMDutyMap d2 = alternativeToDuties.get(a2).stream().filter((d) -> d.getDuty().equals(duty)).findFirst().orElse(null);
                         if (d2 == null) continue;
                         if (gravityIsHigher(d1.getGravity(), d2.getGravity())) {
-                            bkBuilder.append("more_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a1.getShortName()) + ", " + formatShortName(a2.getShortName()) + ").\n");
-                            addedPredicates.add("more_" + formatShortName(duty.getShortName()));
+                            bkBuilder.append("better_respect_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a1.getShortName()) + ", " + formatShortName(a2.getShortName()) + ").\n");
+                            addedPredicates.add("better_respect_" + formatShortName(duty.getShortName()));
                         }
                         if (gravityIsHigher(d2.getGravity(), d1.getGravity())) {
-                            bkBuilder.append("more_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a2.getShortName()) + ", " + formatShortName(a1.getShortName()) + ").\n");
-                            addedPredicates.add("more_" + formatShortName(duty.getShortName()));
+                            bkBuilder.append("better_respect_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a2.getShortName()) + ", " + formatShortName(a1.getShortName()) + ").\n");
+                            addedPredicates.add("better_respect_" + formatShortName(duty.getShortName()));
                         }
                     }
                 }
             }
-            bkBuilder.append("\n");
+//            bkBuilder.append("\n");
         }
 
         // not duties
@@ -106,13 +112,14 @@ public class EDMCaseBaseDirectTranslator {
                         if (d2 == null) continue;
                         if (!(gravityIsHigher(d1.getGravity(), d2.getGravity()) || gravityIsHigher(d2.getGravity(), d1.getGravity()))) {
                             bkBuilder.append("equal_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a1.getShortName()) + ", " + formatShortName(a2.getShortName()) + ").\n");
+                            bkBuilder.append("equal_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a2.getShortName()) + ", " + formatShortName(a1.getShortName()) + ").\n");
                             addedPredicates.add("equal_" + formatShortName(duty.getShortName()));
                         }
                     }
                 }
             }
-            bkBuilder.append("\n");
-        }
+//            bkBuilder.append("\n");
+            }
     }
 
     private boolean gravityIsHigher(EDMInstance gravity1, EDMInstance gravity2) {

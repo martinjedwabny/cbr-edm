@@ -18,14 +18,21 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class EDMCaseSolver implements StandardCBRApplication {
 
     private EDMOntologyConnector _connector; // Object that reads XML files
     private CBRCaseBase _caseBase; // Object that accesses CBR cases and provides indexing
     private List<EDMDutyMap> _dutyMappings;
+    private List<CBRCase> _results;
+    private Integer K;
 
-    public EDMCaseSolver() {}
+    public EDMCaseSolver(Integer K) throws ExecutionException {
+        this.K = K;
+        this.configure();
+        this.preCycle();
+    }
 
     // Initializes all class objects, searches for case base file
     public void configure() throws ExecutionException {
@@ -73,19 +80,15 @@ public class EDMCaseSolver implements StandardCBRApplication {
         /*
         5. Print query, retrieve 10 most similar cases and print them
          */
-        System.out.println("\nQuery:");
-        System.out.println(query);
+        System.out.println("\nQuery: "+query.getDescription());
         System.out.println();
         /*
         6. 'eval' object collects the top 10 results using the 'simConfig' object
             obtained using NNScoringMethod.evaluateSimilarity function
          */
         Collection<RetrievalResult> eval = NNScoringMethod.evaluateSimilarity(this._caseBase.getCases(), query, simConfig);
-        eval = SelectCases.selectTopKRR(eval, 10);
-        System.out.println("Retrieved cases:");
-        for (RetrievalResult nse : eval) {
-            System.out.println(nse);
-        }
+        eval = SelectCases.selectTopKRR(eval, this.K);
+        _results = eval.stream().map((rr) -> rr.get_case()).collect(Collectors.toList());
     }
 
     private void loadNewObjectsToOntology(CBRQuery query) {
@@ -102,9 +105,9 @@ public class EDMCaseSolver implements StandardCBRApplication {
         this._caseBase.close();
     }
 
-    public Map<EDMCaseDescription, EDMCaseSolution> getCasesAndSolutions() {
+    public Map<EDMCaseDescription, EDMCaseSolution> getResults() {
         HashMap<EDMCaseDescription, EDMCaseSolution> map = new HashMap();
-        this._caseBase.getCases().forEach((c) -> map.put((EDMCaseDescription)c.getDescription(), (EDMCaseSolution)c.getSolution()));
+        this._results.forEach((c) -> map.put((EDMCaseDescription)c.getDescription(), (EDMCaseSolution)c.getSolution()));
         return map;
     }
 
