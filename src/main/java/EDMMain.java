@@ -12,7 +12,7 @@ import java.util.Set;
 
 public class EDMMain {
 
-    private static Integer K = 3;
+    private static Integer K = 1;
     private static Integer maxVars = 2;
     private static Integer maxBodyClauses = 3;
     private static Integer maxAmountClauses = 3;
@@ -57,7 +57,10 @@ public class EDMMain {
         EDMCaseBaseDirectTranslator translator = new EDMCaseBaseDirectTranslator(maxVars, maxBodyClauses, maxAmountClauses);
         translator.translate(cbr.getResults(), cbr.getDutyMappings());
         System.out.println("\n"+"Translation finished.");
+        System.out.println("\n"+"Duties:");
         System.out.println(translator.getTranslationBK());
+        System.out.println("Past experiences:");
+        System.out.println(translator.getTranslationExamples());
         return translator;
     }
 

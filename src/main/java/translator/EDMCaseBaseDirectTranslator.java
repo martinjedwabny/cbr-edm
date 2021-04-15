@@ -54,9 +54,9 @@ public class EDMCaseBaseDirectTranslator {
         modesBuilder.append("max_body(" + maxBodyClauses.toString() + ").\n");
         modesBuilder.append("max_clauses(" + maxAmountClauses.toString() + ").\n\n");
 
-        modesBuilder.append("modeh(better, 2).\n");
-        modesBuilder.append("type(better, 0, element).\n");
-        modesBuilder.append("type(better, 1, element).\n\n");
+        modesBuilder.append("modeh(more_ethical, 2).\n");
+        modesBuilder.append("type(more_ethical, 0, element).\n");
+        modesBuilder.append("type(more_ethical, 1, element).\n\n");
 
         for (String s : addedPredicates) {
             modesBuilder.append("modeb(" + s + ", " + 2 + ").\n");
@@ -82,12 +82,12 @@ public class EDMCaseBaseDirectTranslator {
                         EDMDutyMap d2 = alternativeToDuties.get(a2).stream().filter((d) -> d.getDuty().equals(duty)).findFirst().orElse(null);
                         if (d2 == null) continue;
                         if (gravityIsHigher(d1.getGravity(), d2.getGravity())) {
-                            bkBuilder.append("better_respect_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a1.getShortName()) + ", " + formatShortName(a2.getShortName()) + ").\n");
-                            addedPredicates.add("better_respect_" + formatShortName(duty.getShortName()));
+                            bkBuilder.append("better_for_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a1.getShortName()) + ", " + formatShortName(a2.getShortName()) + ").\n");
+                            addedPredicates.add("better_for_" + formatShortName(duty.getShortName()));
                         }
                         if (gravityIsHigher(d2.getGravity(), d1.getGravity())) {
-                            bkBuilder.append("better_respect_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a2.getShortName()) + ", " + formatShortName(a1.getShortName()) + ").\n");
-                            addedPredicates.add("better_respect_" + formatShortName(duty.getShortName()));
+                            bkBuilder.append("better_for_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a2.getShortName()) + ", " + formatShortName(a1.getShortName()) + ").\n");
+                            addedPredicates.add("better_for_" + formatShortName(duty.getShortName()));
                         }
                     }
                 }
@@ -111,9 +111,9 @@ public class EDMCaseBaseDirectTranslator {
                         EDMDutyMap d2 = alternativeToDuties.get(a2).stream().filter((d) -> d.getDuty().equals(duty)).findFirst().orElse(null);
                         if (d2 == null) continue;
                         if (!(gravityIsHigher(d1.getGravity(), d2.getGravity()) || gravityIsHigher(d2.getGravity(), d1.getGravity()))) {
-                            bkBuilder.append("equal_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a1.getShortName()) + ", " + formatShortName(a2.getShortName()) + ").\n");
-                            bkBuilder.append("equal_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a2.getShortName()) + ", " + formatShortName(a1.getShortName()) + ").\n");
-                            addedPredicates.add("equal_" + formatShortName(duty.getShortName()));
+                            bkBuilder.append("equal_for_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a1.getShortName()) + ", " + formatShortName(a2.getShortName()) + ").\n");
+                            bkBuilder.append("equal_for_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a2.getShortName()) + ", " + formatShortName(a1.getShortName()) + ").\n");
+                            addedPredicates.add("equal_for_" + formatShortName(duty.getShortName()));
                         }
                     }
                 }
@@ -130,8 +130,8 @@ public class EDMCaseBaseDirectTranslator {
     private void getExamplesTranslation(StringBuilder examplesBuilder) {
         for (EDMInstance better : betterThan.keySet()) {
             for (EDMAlternative worse : betterThan.get(better)) {
-                examplesBuilder.append("pos(better(" + formatShortName(better.getShortName()) + ", " + formatShortName(worse.getShortName()) + ")).\n");
-                examplesBuilder.append("neg(better(" + formatShortName(worse.getShortName()) + ", " + formatShortName(better.getShortName()) + ")).\n");
+                examplesBuilder.append("pos(more_ethical(" + formatShortName(better.getShortName()) + ", " + formatShortName(worse.getShortName()) + ")).\n");
+                examplesBuilder.append("neg(more_ethical(" + formatShortName(worse.getShortName()) + ", " + formatShortName(better.getShortName()) + ")).\n");
             }
         }
     }
