@@ -6,13 +6,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-public class EDMILPSolver {
+public class EDMPopperSolver {
     private String backgroundKnowledge = "";
     private String modes = "";
     private String examples = "";
     private ArrayList<String> result;
 
-    public EDMILPSolver () {}
+    public EDMPopperSolver() {}
 
     public ArrayList<String> getResult() {
         return result;

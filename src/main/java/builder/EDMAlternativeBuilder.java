@@ -12,6 +12,7 @@ public class EDMAlternativeBuilder extends EDMAbstractInstanceBuilder{
         EDMAlternative instance = new EDMAlternative();
         this.setup(instance, uri);
         buildFeatures(uri, instance);
+        buildVotes(uri, instance);
         return instance;
     }
 
@@ -22,5 +23,12 @@ public class EDMAlternativeBuilder extends EDMAbstractInstanceBuilder{
             features.add(instanceBuilder.build(s));
         });
         instance.setFeatures(features);
+    }
+
+    private void buildVotes(String uri, EDMAlternative instance) {
+        EDMInstanceBuilder instanceBuilder = new EDMInstanceBuilder();
+        OntoBridgeSingleton.getOntoBridge().listPropertyValue(uri,"HAS-VOTES").forEachRemaining((String s) -> {
+            instance.setVotes(instanceBuilder.build(s));
+        });
     }
 }

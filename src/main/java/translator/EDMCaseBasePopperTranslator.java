@@ -1,0 +1,186 @@
+package translator;
+
+import cases.*;
+
+import java.util.*;
+
+public class EDMCaseBasePopperTranslator {
+
+    private String translationBK = "";
+    private String translationModes = "";
+    private String translationExamples = "";
+
+    private Integer maxVars = 2;
+    private Integer maxBodyClauses = 3;
+    private Integer maxAmountClauses = 3;
+
+    public EDMCaseBasePopperTranslator(Integer maxVars, Integer maxBodyClauses, Integer maxAmountClauses) {
+        this.maxVars = maxVars;
+        this.maxBodyClauses = maxBodyClauses;
+        this.maxAmountClauses = maxAmountClauses;
+    }
+
+    private Set<Set<EDMAlternative>> alternatives = new HashSet<>();
+    private HashMap<EDMAlternative, HashSet<EDMAlternative>> betterThan = new HashMap<>();
+    private HashSet<EDMAbstractInstance> duties = new HashSet<>();
+    private HashMap<EDMAlternative, HashSet<EDMDutyMap>> alternativeToDuties = new HashMap<>();
+    private HashSet<String> addedPredicates = new HashSet<>();
+
+    public void translate(Set<EDMCaseDescription> cases, List<EDMDutyMap> dutyMappings) {
+        getPossiblyDuplicatedInstances(cases, dutyMappings);
+
+        StringBuilder bkBuilder = new StringBuilder();
+        StringBuilder modesBuilder = new StringBuilder();
+        StringBuilder examplesBuilder = new StringBuilder();
+
+        getBKTranslation(bkBuilder);
+        getExamplesTranslation(examplesBuilder);
+        getModesTranslation(modesBuilder);
+
+        translationBK = bkBuilder.toString();
+        translationExamples = examplesBuilder.toString();
+        translationModes = modesBuilder.toString();
+    }
+
+    private void getModesTranslation(StringBuilder modesBuilder) {
+        modesBuilder.append("max_vars(" + maxVars.toString() + ").\n");
+        modesBuilder.append("max_body(" + maxBodyClauses.toString() + ").\n");
+        modesBuilder.append("max_clauses(" + maxAmountClauses.toString() + ").\n\n");
+
+        modesBuilder.append("modeh(more_ethical, 2).\n");
+        modesBuilder.append("type(more_ethical, 0, element).\n");
+        modesBuilder.append("type(more_ethical, 1, element).\n\n");
+
+        for (String s : addedPredicates) {
+            modesBuilder.append("modeb(" + s + ", " + 2 + ").\n");
+            modesBuilder.append("type(" + s + ", 0, element).\n");
+            modesBuilder.append("type(" + s + ", 1, element).\n\n");
+        }
+    }
+
+    private void getBKTranslation(StringBuilder bkBuilder) {
+
+        // duties
+        for (EDMAbstractInstance duty : duties) {
+            for (Set<EDMAlternative> as : alternatives) {
+                List<EDMAlternative> alternativeList = new ArrayList<>(as);
+                for (int i = 0; i < alternativeList.size(); i++) {
+                    EDMAlternative a1 = alternativeList.get(i);
+                    if (alternativeToDuties.get(a1) == null) continue;
+                    EDMDutyMap d1 = alternativeToDuties.get(a1).stream().filter((d) -> d.getDuty().equals(duty)).findFirst().orElse(null);
+                    if (d1 == null) continue;
+                    for (int j = i + 1; j < alternativeList.size(); j++) {
+                        EDMAlternative a2 = alternativeList.get(j);
+                        if (alternativeToDuties.get(a2) == null) continue;
+                        EDMDutyMap d2 = alternativeToDuties.get(a2).stream().filter((d) -> d.getDuty().equals(duty)).findFirst().orElse(null);
+                        if (d2 == null) continue;
+                        if (gravityIsHigher(d1.getGravity(), d2.getGravity())) {
+                            bkBuilder.append("better_for_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a1.getShortName()) + ", " + formatShortName(a2.getShortName()) + ").\n");
+                            addedPredicates.add("better_for_" + formatShortName(duty.getShortName()));
+                        }
+                        if (gravityIsHigher(d2.getGravity(), d1.getGravity())) {
+                            bkBuilder.append("better_for_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a2.getShortName()) + ", " + formatShortName(a1.getShortName()) + ").\n");
+                            addedPredicates.add("better_for_" + formatShortName(duty.getShortName()));
+                        }
+                    }
+                }
+            }
+//            bkBuilder.append("\n");
+        }
+
+        // not duties
+
+        for (EDMAbstractInstance duty : duties) {
+            for (Set<EDMAlternative> as : alternatives) {
+                List<EDMAlternative> alternativeList = new ArrayList<>(as);
+                for (int i = 0; i < alternativeList.size(); i++) {
+                    EDMAlternative a1 = alternativeList.get(i);
+                    if (alternativeToDuties.get(a1) == null) continue;
+                    EDMDutyMap d1 = alternativeToDuties.get(a1).stream().filter((d) -> d.getDuty().equals(duty)).findFirst().orElse(null);
+                    if (d1 == null) continue;
+                    for (int j = i + 1; j < alternativeList.size(); j++) {
+                        EDMAlternative a2 = alternativeList.get(j);
+                        if (alternativeToDuties.get(a2) == null) continue;
+                        EDMDutyMap d2 = alternativeToDuties.get(a2).stream().filter((d) -> d.getDuty().equals(duty)).findFirst().orElse(null);
+                        if (d2 == null) continue;
+                        if (!(gravityIsHigher(d1.getGravity(), d2.getGravity()) || gravityIsHigher(d2.getGravity(), d1.getGravity()))) {
+                            bkBuilder.append("equal_for_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a1.getShortName()) + ", " + formatShortName(a2.getShortName()) + ").\n");
+                            bkBuilder.append("equal_for_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a2.getShortName()) + ", " + formatShortName(a1.getShortName()) + ").\n");
+                            addedPredicates.add("equal_for_" + formatShortName(duty.getShortName()));
+                        }
+                    }
+                }
+            }
+//            bkBuilder.append("\n");
+            }
+    }
+
+    private boolean gravityIsHigher(EDMInstance gravity1, EDMInstance gravity2) {
+        List<String> gravities = new ArrayList<String>(Arrays.asList("Extremely-bad","Really-bad","Bad","Neutral","Good","Really-good","Extremely-good"));
+        return gravities.indexOf(gravity1.getShortName()) > gravities.indexOf(gravity2.getShortName());
+    }
+
+    private void getExamplesTranslation(StringBuilder examplesBuilder) {
+        for (EDMAlternative better : betterThan.keySet()) {
+            for (EDMAlternative worse : betterThan.get(better)) {
+                examplesBuilder.append("pos(more_ethical(" + formatShortName(better.getShortName()) + ", " + formatShortName(worse.getShortName()) + ")).\n");
+                examplesBuilder.append("neg(more_ethical(" + formatShortName(worse.getShortName()) + ", " + formatShortName(better.getShortName()) + ")).\n");
+            }
+        }
+    }
+
+    private String formatShortName(String shortName) {
+        return shortName.replace('-','_').replace('.','_');
+    }
+
+    private void getPossiblyDuplicatedInstances(Set<EDMCaseDescription> cases, List<EDMDutyMap> dutyMappings) {
+        HashMap<EDMCaseDescription, EDMAlternative> map = new HashMap<>();
+        for (EDMCaseDescription desc : cases) {
+            EDMAlternative solution = null;
+            for (EDMAlternative alt : desc.getAlternatives())
+                if (solution == null || Integer.valueOf(solution.getVotes().getShortName()) < Integer.valueOf(alt.getVotes().getShortName()))
+                    solution = alt;
+            map.put(desc, solution);
+        }
+        HashMap<EDMInstance, EDMDutyMap> featureToDuty = new HashMap<>();
+        for (EDMDutyMap dutyMap : dutyMappings)
+            featureToDuty.put(dutyMap.getFeature(), dutyMap);
+        for (EDMCaseDescription description : map.keySet()) {
+            EDMAlternative solution = map.get(description);
+            alternatives.add(description.getAlternatives());
+            for (EDMAlternative alternative : description.getAlternatives()) {
+                if (solution!= null && !alternative.getShortName().equals(solution.getShortName())) {
+                    betterThan.putIfAbsent(solution, new HashSet<>());
+                    betterThan.get(solution).add(alternative);
+                }
+                for (EDMAbstractInstance feature : alternative.getFeatures()) {
+                    if (featureToDuty.containsKey(feature)) {
+                        duties.add(featureToDuty.get(feature).getDuty());
+                        alternativeToDuties.putIfAbsent(alternative, new HashSet<>());
+                        alternativeToDuties.get(alternative).add(featureToDuty.get(feature));
+                    }
+                }
+            }
+        }
+    }
+
+    public String getTranslationBK() {
+        return translationBK;
+    }
+
+    public String getTranslationModes() {
+        return translationModes;
+    }
+
+    public String getTranslationExamples() {
+        return translationExamples;
+    }
+
+    @Override
+    public String toString() {
+        return "translationBK:\n" + translationBK + "\n" +
+                "translationModes:\n" + translationModes + "\n" +
+                "translationExamples:\n" + translationExamples + "\n";
+    }
+}
+

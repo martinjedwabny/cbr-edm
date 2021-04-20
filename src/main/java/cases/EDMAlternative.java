@@ -6,6 +6,15 @@ import java.util.Set;
 public class EDMAlternative extends EDMAbstractInstance {
 
     private Set<EDMAbstractInstance> features;
+    private EDMInstance votes;
+
+    public EDMInstance getVotes() {
+        return votes;
+    }
+
+    public void setVotes(EDMInstance votes) {
+        this.votes = votes;
+    }
 
     public EDMAlternative() {}
 

@@ -1,39 +1,23 @@
 package translator;
-
 import cases.*;
 
 import java.util.*;
 
-/* Things to consider:
-1. feature(Action),
-2. not_feature(Action),
-3. moreBeneficence(Action1,Action2),
-4. not_moreBeneficence(Action1,Action2).
- */
-
-public class EDMCaseBaseDirectTranslator {
+public class EDMCaseBaseProbFOILTranslator {
 
     private String translationBK = "";
     private String translationModes = "";
     private String translationExamples = "";
 
-    private Integer maxVars = 2;
-    private Integer maxBodyClauses = 3;
-    private Integer maxAmountClauses = 3;
-
-    public EDMCaseBaseDirectTranslator(Integer maxVars, Integer maxBodyClauses, Integer maxAmountClauses) {
-        this.maxVars = maxVars;
-        this.maxBodyClauses = maxBodyClauses;
-        this.maxAmountClauses = maxAmountClauses;
-    }
+    public EDMCaseBaseProbFOILTranslator() {}
 
     private Set<Set<EDMAlternative>> alternatives = new HashSet<>();
-    private HashMap<EDMInstance, HashSet<EDMAlternative>> betterThan = new HashMap<>();
+    private HashMap<EDMAlternative, HashMap<EDMAlternative, Double>> alternativeProbability = new HashMap<>();
     private HashSet<EDMAbstractInstance> duties = new HashSet<>();
     private HashMap<EDMAlternative, HashSet<EDMDutyMap>> alternativeToDuties = new HashMap<>();
     private HashSet<String> addedPredicates = new HashSet<>();
 
-    public void translate(Map<EDMCaseDescription, EDMCaseSolution> cases, List<EDMDutyMap> dutyMappings) {
+    public void translate(Set<EDMCaseDescription> cases, List<EDMDutyMap> dutyMappings) {
         getPossiblyDuplicatedInstances(cases, dutyMappings);
 
         StringBuilder bkBuilder = new StringBuilder();
@@ -50,22 +34,33 @@ public class EDMCaseBaseDirectTranslator {
     }
 
     private void getModesTranslation(StringBuilder modesBuilder) {
-        modesBuilder.append("max_vars(" + maxVars.toString() + ").\n");
-        modesBuilder.append("max_body(" + maxBodyClauses.toString() + ").\n");
-        modesBuilder.append("max_clauses(" + maxAmountClauses.toString() + ").\n\n");
-
-        modesBuilder.append("modeh(more_ethical, 2).\n");
-        modesBuilder.append("type(more_ethical, 0, element).\n");
-        modesBuilder.append("type(more_ethical, 1, element).\n\n");
 
         for (String s : addedPredicates) {
-            modesBuilder.append("modeb(" + s + ", " + 2 + ").\n");
-            modesBuilder.append("type(" + s + ", 0, element).\n");
-            modesBuilder.append("type(" + s + ", 1, element).\n\n");
+            modesBuilder.append("mode(" + s + "(+,+)).\n");
         }
+
+        modesBuilder.append("\n");
+
+        for (String s : addedPredicates) {
+            modesBuilder.append("base(" + s + "(alternative,alternative)).\n");
+        }
+
+        modesBuilder.append("base(more_ethical(alternative,alternative)).\n");
+
+        modesBuilder.append("\n");
+
+        modesBuilder.append("learn(more_ethical/2).\n");
     }
 
     private void getBKTranslation(StringBuilder bkBuilder) {
+
+        for (Set<EDMAlternative> as : alternatives) {
+            for (EDMAlternative alternative : as) {
+                bkBuilder.append("alternative(" + formatShortName(alternative.getShortName()) + ").\n");
+            }
+        }
+
+        bkBuilder.append("\n");
 
         // duties
         for (EDMAbstractInstance duty : duties) {
@@ -92,8 +87,9 @@ public class EDMCaseBaseDirectTranslator {
                     }
                 }
             }
-//            bkBuilder.append("\n");
         }
+
+        bkBuilder.append("\n");
 
         // not duties
 
@@ -118,8 +114,7 @@ public class EDMCaseBaseDirectTranslator {
                     }
                 }
             }
-//            bkBuilder.append("\n");
-            }
+        }
     }
 
     private boolean gravityIsHigher(EDMInstance gravity1, EDMInstance gravity2) {
@@ -128,10 +123,17 @@ public class EDMCaseBaseDirectTranslator {
     }
 
     private void getExamplesTranslation(StringBuilder examplesBuilder) {
-        for (EDMInstance better : betterThan.keySet()) {
-            for (EDMAlternative worse : betterThan.get(better)) {
-                examplesBuilder.append("pos(more_ethical(" + formatShortName(better.getShortName()) + ", " + formatShortName(worse.getShortName()) + ")).\n");
-                examplesBuilder.append("neg(more_ethical(" + formatShortName(worse.getShortName()) + ", " + formatShortName(better.getShortName()) + ")).\n");
+        for (Set<EDMAlternative> as : alternatives) {
+            List<EDMAlternative> alternativeList = new ArrayList<>(as);
+            for (int i = 0; i < alternativeList.size(); i++) {
+                EDMAlternative a1 = alternativeList.get(i);
+                for (int j = i + 1; j < alternativeList.size(); j++) {
+                    EDMAlternative a2 = alternativeList.get(j);
+                    Double p1 = alternativeProbability.get(a1).get(a2);
+                    Double p2 = alternativeProbability.get(a2).get(a1);
+                    examplesBuilder.append(p1.toString() + "::more_ethical(" + formatShortName(a1.getShortName()) + ", " + formatShortName(a2.getShortName()) + ").\n");
+                    examplesBuilder.append(p2.toString() + "::more_ethical(" + formatShortName(a2.getShortName()) + ", " + formatShortName(a1.getShortName()) + ").\n");
+                }
             }
         }
     }
@@ -140,17 +142,22 @@ public class EDMCaseBaseDirectTranslator {
         return shortName.replace('-','_').replace('.','_');
     }
 
-    private void getPossiblyDuplicatedInstances(Map<EDMCaseDescription, EDMCaseSolution> cases, List<EDMDutyMap> dutyMappings) {
+    private void getPossiblyDuplicatedInstances(Set<EDMCaseDescription> cases, List<EDMDutyMap> dutyMappings) {
         HashMap<EDMInstance, EDMDutyMap> featureToDuty = new HashMap<>();
         for (EDMDutyMap dutyMap : dutyMappings)
             featureToDuty.put(dutyMap.getFeature(), dutyMap);
-        for (EDMCaseDescription description : cases.keySet()) {
-            EDMCaseSolution solution = cases.get(description);
+        for (EDMCaseDescription description : cases) {
             alternatives.add(description.getAlternatives());
+            Double totalVotesSituation = 0.0;
+            for (EDMAlternative alternative : description.getAlternatives())
+                totalVotesSituation += Double.valueOf(alternative.getVotes().getShortName());
             for (EDMAlternative alternative : description.getAlternatives()) {
-                if (solution.getAlternative()!= null && !alternative.getShortName().equals(solution.getAlternative().getShortName())) {
-                    betterThan.putIfAbsent(solution.getAlternative(), new HashSet<>());
-                    betterThan.get(solution.getAlternative()).add(alternative);
+                Double votesAlternative = Double.valueOf(alternative.getVotes().getShortName());
+                alternativeProbability.put(alternative, new HashMap<>());
+                for (EDMAlternative other : description.getAlternatives()) {
+                    Double votesOther = Double.valueOf(other.getVotes().getShortName());
+                    Double p = (((votesAlternative - votesOther) / totalVotesSituation) + 1) / 2;
+                    alternativeProbability.get(alternative).put(other, p);
                 }
                 for (EDMAbstractInstance feature : alternative.getFeatures()) {
                     if (featureToDuty.containsKey(feature)) {

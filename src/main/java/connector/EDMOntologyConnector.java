@@ -11,7 +11,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import builder.EDMCaseDescriptionBuilder;
-import builder.EDMCaseSolutionBuilder;
 import builder.EDMDutyMapBuilder;
 import cases.EDMDutyMap;
 import org.apache.logging.log4j.LogManager;
@@ -120,10 +119,6 @@ public class EDMOntologyConnector implements Connector {
                 CaseComponent description = retrieveCaseDescription(caseInstance);
                 _case.setDescription(description);
 
-                //Map solution
-                CaseComponent cc = retrieveCaseSolution(caseInstance);
-                _case.setSolution(cc);
-
                 // If everything ok add the case to the list
                 cases.add(_case);
 
@@ -151,10 +146,6 @@ public class EDMOntologyConnector implements Connector {
 
     private CaseComponent retrieveCaseDescription(String uri) {
         return new EDMCaseDescriptionBuilder().build(uri);
-    }
-
-    private CaseComponent retrieveCaseSolution(String uri) {
-        return new EDMCaseSolutionBuilder().build(uri);
     }
 
     /**

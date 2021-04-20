@@ -14,10 +14,7 @@ import es.ucm.fdi.gaia.jcolibri.util.FileIO;
 import similarity.EDMSetGreedy;
 import similarity.EDMAlternativeSimilarityFunction;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class EDMCaseSolver implements StandardCBRApplication {
@@ -105,10 +102,10 @@ public class EDMCaseSolver implements StandardCBRApplication {
         this._caseBase.close();
     }
 
-    public Map<EDMCaseDescription, EDMCaseSolution> getResults() {
-        HashMap<EDMCaseDescription, EDMCaseSolution> map = new HashMap();
-        this._results.forEach((c) -> map.put((EDMCaseDescription)c.getDescription(), (EDMCaseSolution)c.getSolution()));
-        return map;
+    public Set<EDMCaseDescription> getResults() {
+        HashSet<EDMCaseDescription> s = new HashSet();
+        this._results.forEach((c) -> s.add((EDMCaseDescription)c.getDescription()));
+        return s;
     }
 
     public List<EDMDutyMap> getDutyMappings(){
