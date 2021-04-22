@@ -2,7 +2,6 @@ import cases.*;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNScoringMethod;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.RetrievalResult;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.selection.SelectCases;
-import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;
 import connector.EDMOntologyConnector;
 import es.ucm.fdi.gaia.jcolibri.casebase.LinealCaseBase;
 import es.ucm.fdi.gaia.jcolibri.cbraplications.StandardCBRApplication;
@@ -11,7 +10,8 @@ import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.NNConfig;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.global.Average;
 import es.ucm.fdi.gaia.jcolibri.util.FileIO;
-import similarity.EDMSetGreedy;
+import similarity.EDMEditDistanceSimilarityFunction;
+import similarity.EDMSetGreedySimilarityFunction;
 import similarity.EDMAlternativeSimilarityFunction;
 
 import java.util.*;
@@ -21,7 +21,6 @@ public class EDMCaseSolver implements StandardCBRApplication {
 
     private EDMOntologyConnector _connector; // Object that reads XML files
     private CBRCaseBase _caseBase; // Object that accesses CBR cases and provides indexing
-    private List<EDMDutyMap> _dutyMappings;
     private List<CBRCase> _results;
     private Integer K;
 
@@ -37,7 +36,6 @@ public class EDMCaseSolver implements StandardCBRApplication {
             this._connector = new EDMOntologyConnector();
             this._connector.initFromXMLfile(FileIO.findFile("main/resources/ontologyconfig.xml"));
             this._caseBase = new LinealCaseBase();
-            this._dutyMappings = this._connector.retrieveDutyMaps();
         } catch (Exception var2) {
             throw new ExecutionException(var2);
         }
@@ -56,7 +54,6 @@ public class EDMCaseSolver implements StandardCBRApplication {
     }
 
     public void cycle(CBRQuery query) throws ExecutionException {
-        loadNewObjectsToOntology(query);
         /*
         1. NNConfig 'simConfig' : nearest neighbors object, created to compare TravelDescription objects
         2. Stores :
@@ -72,7 +69,10 @@ public class EDMCaseSolver implements StandardCBRApplication {
         4. 'addMapping' stores an 'Attribute -> LocalSimilarityFunction in the simConfig object
          */
         simConfig.addMapping(new Attribute("alternatives", EDMCaseDescription.class),
-                new EDMSetGreedy(new EDMAlternativeSimilarityFunction()));
+                new EDMSetGreedySimilarityFunction(new EDMAlternativeSimilarityFunction()));
+
+        simConfig.addMapping(new Attribute("situationFeatures", EDMCaseDescription.class),
+                new EDMSetGreedySimilarityFunction(new EDMEditDistanceSimilarityFunction()));
 
         /*
         5. Print query, retrieve 10 most similar cases and print them
@@ -88,16 +88,6 @@ public class EDMCaseSolver implements StandardCBRApplication {
         _results = eval.stream().map((rr) -> rr.get_case()).collect(Collectors.toList());
     }
 
-    private void loadNewObjectsToOntology(CBRQuery query) {
-        EDMCaseDescription caseDescription = (EDMCaseDescription) query.getDescription();
-        for (EDMAlternative a : caseDescription.getAlternatives()) {
-            for (EDMAbstractInstance f : a.getFeatures()) {
-                if (!OntoBridgeSingleton.getOntoBridge().existsInstance(f.getShortName()))
-                    OntoBridgeSingleton.getOntoBridge().createInstance(f.getClassName(), f.getShortName());
-            }
-        }
-    }
-
     public void postCycle() throws ExecutionException {
         this._caseBase.close();
     }
@@ -106,9 +96,5 @@ public class EDMCaseSolver implements StandardCBRApplication {
         HashSet<EDMCaseDescription> s = new HashSet();
         this._results.forEach((c) -> s.add((EDMCaseDescription)c.getDescription()));
         return s;
-    }
-
-    public List<EDMDutyMap> getDutyMappings(){
-        return this._dutyMappings;
     }
 }

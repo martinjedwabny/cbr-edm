@@ -4376,7 +4376,7 @@
 
     <owl:NamedIndividual rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#prevent_harm()-mapping">
         <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#DUTY-MAPPING"/>
-        <HAS-DUTY rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#Self-improvement"/>
+        <HAS-DUTY rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#Non-maleficence"/>
         <HAS-DUTY-FEATURE rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#prevent_harm()"/>
         <HAS-DUTY-GRAVITY rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#Really-good"/>
     </owl:NamedIndividual>

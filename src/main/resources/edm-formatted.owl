@@ -173,7 +173,7 @@
   </rdf:Description>
   <rdf:Description rdf:about="http://gaia.fdi.ucm.es/ontologies/vacation.owl#prevent_harm()-mapping">
     <vacation:HAS-DUTY-FEATURE rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#prevent_harm()"/>
-    <vacation:HAS-DUTY rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#Self-improvement"/>
+    <vacation:HAS-DUTY rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#Non-maleficence"/>
     <rdf:type rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#DUTY-MAPPING"/>
     <vacation:HAS-DUTY-GRAVITY rdf:resource="http://gaia.fdi.ucm.es/ontologies/vacation.owl#Really-good"/>
   </rdf:Description>

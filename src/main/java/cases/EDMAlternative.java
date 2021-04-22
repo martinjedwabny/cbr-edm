@@ -7,6 +7,7 @@ public class EDMAlternative extends EDMAbstractInstance {
 
     private Set<EDMAbstractInstance> features;
     private EDMInstance votes;
+    private Set<EDMDutyFeature> duties;
 
     public EDMInstance getVotes() {
         return votes;
@@ -28,7 +29,7 @@ public class EDMAlternative extends EDMAbstractInstance {
 
     @Override
     public String toString() {
-        return "(" + this.getShortName() + ":" + this.features + ")";
+        return "(" + this.getShortName() + ":" + this.features + ":" + this.duties + ")";
     }
 
     @Override
@@ -44,5 +45,13 @@ public class EDMAlternative extends EDMAbstractInstance {
         if (!super.equals(o)) return false;
         EDMAlternative that = (EDMAlternative) o;
         return Objects.equals(features, that.features);
+    }
+
+    public Set<EDMDutyFeature> getDuties() {
+        return duties;
+    }
+
+    public void setDuties(Set<EDMDutyFeature> duties) {
+        this.duties = duties;
     }
 }

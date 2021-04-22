@@ -1,19 +1,17 @@
+import builder.EDMCaseDescriptionBuilder;
 import cases.EDMAlternative;
 import cases.EDMCaseDescription;
 import cases.EDMInstance;
-import connector.EDMXMLFormatter;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRQuery;
 import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
-import ilp.EDMPopperSolver;
 import ilp.EDMProbFOILSolver;
-import translator.EDMCaseBasePopperTranslator;
 import translator.EDMCaseBaseProbFOILTranslator;
 
 import java.util.Set;
 
 public class EDMMain {
 
-    private static Integer K = 12;
+    final private static Integer K = 10;
 
     public static void main(String[] args) {
 
@@ -28,7 +26,7 @@ public class EDMMain {
             CBRQuery query = getCbrQuery();
             // 3. Run query
             cbr.cycle(query);
-//            printMostSimilarCases(cbr);
+            printMostSimilarCases(cbr);
             EDMCaseBaseProbFOILTranslator translator = translateProbFOIL(cbr);
             runILPSolver(translator);
             cbr.postCycle();
@@ -51,20 +49,9 @@ public class EDMMain {
 //            System.out.println(s);
     }
 
-    private static EDMCaseBasePopperTranslator translatePopper(EDMCaseSolver cbr) {
-        EDMCaseBasePopperTranslator translator = new EDMCaseBasePopperTranslator(2, 3, 3);
-        translator.translate(cbr.getResults(), cbr.getDutyMappings());
-        System.out.println("\n"+"Translation finished.");
-        System.out.println("\n"+"Duties:");
-        System.out.println(translator.getTranslationBK());
-        System.out.println("Past experiences:");
-        System.out.println(translator.getTranslationExamples());
-        return translator;
-    }
-
     private static EDMCaseBaseProbFOILTranslator translateProbFOIL(EDMCaseSolver cbr) {
         EDMCaseBaseProbFOILTranslator translator = new EDMCaseBaseProbFOILTranslator();
-        translator.translate(cbr.getResults(), cbr.getDutyMappings());
+        translator.translate(cbr.getResults());
         System.out.println("\n"+"Translation finished.\n");
 //        System.out.println(translator);
         return translator;
@@ -77,11 +64,16 @@ public class EDMMain {
     }
 
     private static CBRQuery getCbrQuery() {
-        EDMAlternative a1 = new EDMAlternative();
-        a1.setFeatures(Set.of(new EDMInstance("prevent_harm()")));
-        EDMAlternative a2 = new EDMAlternative();
-        a2.setFeatures(Set.of(new EDMInstance("comply_law()")));
-        EDMCaseDescription queryDesc = new EDMCaseDescription("new-problem", Set.of(a1,a2), Set.of());
+//        EDMAlternative a1 = new EDMAlternative();
+//        a1.setFeatures(Set.of(new EDMInstance("prevent_harm()")));
+//        EDMAlternative a2 = new EDMAlternative();
+//        a2.setFeatures(Set.of(new EDMInstance("comply_law()")));
+//        EDMCaseDescription queryDesc = new EDMCaseDescription("new-problem", Set.of(a1,a2), Set.of());
+        EDMCaseDescription queryDesc = new EDMCaseDescriptionBuilder().build(
+                "new-problem",
+                Set.of("has_something_to_hide()"),
+                Set.of("prevent_harm()"),
+                Set.of("comply_law()"));
         CBRQuery query = new CBRQuery();
         query.setDescription(queryDesc);
         return query;

@@ -11,8 +11,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import builder.EDMCaseDescriptionBuilder;
-import builder.EDMDutyMapBuilder;
-import cases.EDMDutyMap;
+import builder.EDMDutyFeatureBuilder;
+import cases.EDMDutyFeature;
 import org.apache.logging.log4j.LogManager;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -130,18 +130,6 @@ public class EDMOntologyConnector implements Connector {
         }
         ProgressController.finish(this.getClass());
         return cases;
-    }
-
-    public List<EDMDutyMap> retrieveDutyMaps() {
-        ArrayList<EDMDutyMap> maps = new ArrayList<>();
-        OntoBridge ob = OntoBridgeSingleton.getOntoBridge();
-        EDMDutyMapBuilder builder = new EDMDutyMapBuilder();
-        Iterator<String> dutyMapUris =  ob.listDeclaredInstances("DUTY-MAPPING");
-        while(dutyMapUris.hasNext()) {
-            String uri = dutyMapUris.next();
-            maps.add(builder.build(uri));
-        }
-        return maps;
     }
 
     private CaseComponent retrieveCaseDescription(String uri) {

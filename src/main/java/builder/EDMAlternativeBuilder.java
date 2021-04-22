@@ -1,8 +1,7 @@
 package builder;
 
-import cases.EDMAlternative;
+import cases.*;
 import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;
-import cases.EDMAbstractInstance;
 
 import java.util.HashSet;
 
@@ -13,6 +12,7 @@ public class EDMAlternativeBuilder extends EDMAbstractInstanceBuilder{
         this.setup(instance, uri);
         buildFeatures(uri, instance);
         buildVotes(uri, instance);
+        buildDuties(instance);
         return instance;
     }
 
@@ -29,6 +29,21 @@ public class EDMAlternativeBuilder extends EDMAbstractInstanceBuilder{
         EDMInstanceBuilder instanceBuilder = new EDMInstanceBuilder();
         OntoBridgeSingleton.getOntoBridge().listPropertyValue(uri,"HAS-VOTES").forEachRemaining((String s) -> {
             instance.setVotes(instanceBuilder.build(s));
+        });
+    }
+
+    private void buildDuties(EDMAlternative instance) {
+        instance.setDuties(new HashSet<>());
+        EDMInstanceBuilder instanceBuilder = new EDMInstanceBuilder();
+        EDMDutyFeatureBuilder dutyBuilder = new EDMDutyFeatureBuilder();
+        OntoBridgeSingleton.getOntoBridge().listDeclaredInstances("DUTY-MAPPING").forEachRemaining((String uuri) -> {
+            OntoBridgeSingleton.getOntoBridge().listPropertyValue(uuri,"HAS-DUTY-FEATURE").forEachRemaining((String s) -> {
+                if (instance.getFeatures().contains(instanceBuilder.build(s))) {
+                    EDMDutyFeature duty = dutyBuilder.build(uuri);
+                    if (duty != null && duty.getDuty() != null && duty.getGravity() != null)
+                        instance.getDuties().add(duty);
+                }
+            });
         });
     }
 }

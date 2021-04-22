@@ -7,11 +7,11 @@ import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.LocalSimi
 import java.util.HashMap;
 import java.util.Set;
 
-public class EDMSetGreedy implements LocalSimilarityFunction {
+public class EDMSetGreedySimilarityFunction implements LocalSimilarityFunction {
 
     private LocalSimilarityFunction elementSimilarityFunction;
 
-    public EDMSetGreedy(LocalSimilarityFunction elementSimilarityFunction){
+    public EDMSetGreedySimilarityFunction(LocalSimilarityFunction elementSimilarityFunction){
         this.elementSimilarityFunction = elementSimilarityFunction;
     }
 

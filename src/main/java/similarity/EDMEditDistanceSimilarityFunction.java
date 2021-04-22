@@ -1,12 +1,12 @@
 package similarity;
 
+import cases.EDMAbstractInstance;
 import es.ucm.fdi.gaia.jcolibri.exception.NoApplicableSimilarityFunctionException;
 import es.ucm.fdi.gaia.jcolibri.method.retrieve.NNretrieval.similarity.LocalSimilarityFunction;
 import es.ucm.fdi.gaia.jcolibri.util.OntoBridgeSingleton;
 import es.ucm.fdi.gaia.ontobridge.OntoBridge;
-import cases.EDMAbstractInstance;
 
-public class EDMOntDeep implements LocalSimilarityFunction {
+public class EDMEditDistanceSimilarityFunction  implements LocalSimilarityFunction {
 
     public double compute(Object caseObject, Object queryObject) throws NoApplicableSimilarityFunctionException {
         if ((caseObject == null) || (queryObject == null))
@@ -19,29 +19,33 @@ public class EDMOntDeep implements LocalSimilarityFunction {
         EDMAbstractInstance i1 = (EDMAbstractInstance) caseObject;
         EDMAbstractInstance i2 = (EDMAbstractInstance) queryObject;
 
-        if (i1.equals(i2))
-            return 1;
+        double editDistance = editDistance(i1.getShortName(), i2.getShortName());
 
-        OntoBridge ob = OntoBridgeSingleton.getOntoBridge();
+        double editSim = editDistance == 0 ? 1 : 1 - editDistance / Math.max(i1.getShortName().length(), i2.getShortName().length());
 
-        double up = 0.0;
-        try {
-            up = ob.maxProfLCS(i1.getShortName(), i2.getShortName());
-        } catch (NullPointerException e) {
-            System.out.println("Null Pointer : maxProfLCS(" + i1.toString()+", "+i2.toString()+")");
+        return editSim;
+    }
+
+    private int editDistance(String str1, String str2) {
+        int len1 = str1.length();
+        int len2 = str2.length();
+        int [][]DP = new int[2][len1 + 1];
+        for (int i = 0; i <= len1; i++)
+            DP[0][i] = i;
+        for (int i = 1; i <= len2; i++) {
+            for (int j = 0; j <= len1; j++) {
+                if (j == 0) {
+                    DP[i % 2][j] = i;
+                } else if (str1.charAt(j - 1) == str2.charAt(i - 1)) {
+                    DP[i % 2][j] = DP[(i - 1) % 2][j - 1];
+                } else {
+                    DP[i % 2][j] = 1 + Math.min(DP[(i - 1) % 2][j],
+                            Math.min(DP[i % 2][j - 1],
+                                    DP[(i - 1) % 2][j - 1]));
+                }
+            }
         }
-        double down;
-
-        int prof1 = ob.profInstance(i1.getShortName());
-        int prof2 = ob.profInstance(i2.getShortName());
-        if (prof1 > prof2)
-            down = prof1;
-        else
-            down = prof2;
-
-//        System.out.println("maxProfLCS(" + i1.toString()+", "+i2.toString()+") = "+ up / down);
-
-        return up / down;
+        return DP[len2 % 2][len1];
     }
 
     /** Applicable to EDMAbstractInstance */
