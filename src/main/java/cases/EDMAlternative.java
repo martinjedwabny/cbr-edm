@@ -29,7 +29,7 @@ public class EDMAlternative extends EDMAbstractInstance {
 
     @Override
     public String toString() {
-        return "(" + this.getShortName() + ":" + this.features + ":" + this.duties + ")";
+        return "(" + this.getShortName() + ":" + this.features + ":" + this.duties + ":" + this.votes + ")";
     }
 
     @Override

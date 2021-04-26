@@ -1,12 +1,12 @@
-mode(geq_Self_improvement(+,+)).
-mode(geq_Beneficence(+,+)).
-mode(geq_Fidelity(+,+)).
-mode(geq_Non_maleficence(+,+)).
+mode(gt_Non_maleficence(+,+)).
+mode(gt_Self_improvement(+,+)).
+mode(gt_Fidelity(+,+)).
+mode(gt_Beneficence(+,+)).
 
-base(geq_Self_improvement(alternative,alternative)).
-base(geq_Beneficence(alternative,alternative)).
-base(geq_Fidelity(alternative,alternative)).
-base(geq_Non_maleficence(alternative,alternative)).
+base(gt_Non_maleficence(alternative,alternative)).
+base(gt_Self_improvement(alternative,alternative)).
+base(gt_Fidelity(alternative,alternative)).
+base(gt_Beneficence(alternative,alternative)).
 base(more_ethical(alternative,alternative)).
 
 learn(more_ethical/2).

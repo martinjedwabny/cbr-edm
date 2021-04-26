@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class EDMMain {
 
-    final private static Integer K = 10;
+    final private static Integer K = 12;
 
     public static void main(String[] args) {
 
@@ -72,7 +72,7 @@ public class EDMMain {
         EDMCaseDescription queryDesc = new EDMCaseDescriptionBuilder().build(
                 "new-problem",
                 Set.of("has_something_to_hide()"),
-                Set.of("prevent_harm()"),
+                Set.of("kill()"),
                 Set.of("comply_law()"));
         CBRQuery query = new CBRQuery();
         query.setDescription(queryDesc);

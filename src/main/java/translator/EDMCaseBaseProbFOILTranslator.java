@@ -74,12 +74,12 @@ public class EDMCaseBaseProbFOILTranslator {
                         EDMDutyFeature d2 = a2.getDuties().stream().filter((d) -> d.getDuty().equals(duty)).findFirst().orElse(null);
                         if (d2 == null) continue;
                         if (gravityIsHigher(d1.getGravity(), d2.getGravity())) {
-                            bkBuilder.append("geq_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a1.getShortName()) + ", " + formatShortName(a2.getShortName()) + ").\n");
-                            addedPredicates.add("geq_" + formatShortName(duty.getShortName()));
+                            bkBuilder.append("gt_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a1.getShortName()) + ", " + formatShortName(a2.getShortName()) + ").\n");
+                            addedPredicates.add("gt_" + formatShortName(duty.getShortName()));
                         }
                         if (gravityIsHigher(d2.getGravity(), d1.getGravity())) {
-                            bkBuilder.append("geq_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a2.getShortName()) + ", " + formatShortName(a1.getShortName()) + ").\n");
-                            addedPredicates.add("geq_" + formatShortName(duty.getShortName()));
+                            bkBuilder.append("gt_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a2.getShortName()) + ", " + formatShortName(a1.getShortName()) + ").\n");
+                            addedPredicates.add("gt_" + formatShortName(duty.getShortName()));
                         }
                     }
                 }
