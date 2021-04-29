@@ -11,12 +11,15 @@ public class EDMCaseBaseProbFOILTranslator {
 
     public EDMCaseBaseProbFOILTranslator() {}
 
+    private Set<EDMCaseDescription> cases;
     private Set<Set<EDMAlternative>> alternatives = new HashSet<>();
     private HashMap<EDMAlternative, HashMap<EDMAlternative, Double>> alternativeProbability = new HashMap<>();
+    private HashSet<EDMAbstractInstance> situationFeatures = new HashSet<>();
     private HashSet<EDMAbstractInstance> duties = new HashSet<>();
     private HashSet<String> addedPredicates = new HashSet<>();
 
     public void translate(Set<EDMCaseDescription> cases) {
+        this.cases = cases;
         getPossiblyDuplicatedInstances(cases);
 
         StringBuilder bkBuilder = new StringBuilder();
@@ -33,29 +36,69 @@ public class EDMCaseBaseProbFOILTranslator {
     }
 
     private void getModesTranslation(StringBuilder modesBuilder) {
-
-        for (String s : addedPredicates) {
-            modesBuilder.append("mode(" + s + "(+,+)).\n");
-        }
-
+        modesBuilder.append("mode(hasFeature(+,c)).\n");
+        modesBuilder.append("mode(hasDuty(+,c)).\n");
         modesBuilder.append("\n");
 
-        for (String s : addedPredicates) {
-            modesBuilder.append("base(" + s + "(alternative,alternative)).\n");
-        }
-
-        modesBuilder.append("base(more_ethical(alternative,alternative)).\n");
-
+        modesBuilder.append("base(hasFeature(situation,feature)).\n");
+        modesBuilder.append("base(hasDuty(alternative,duty)).\n");
+        modesBuilder.append("base(more_stringent(alternative,alternative,situation)).\n");
         modesBuilder.append("\n");
 
-        modesBuilder.append("learn(more_ethical/2).\n");
+        modesBuilder.append("option(negation, off).\n");
+        modesBuilder.append("\n");
+
+        modesBuilder.append("required(hasDuty).\n");
+        modesBuilder.append("\n");
+
+        modesBuilder.append("learn(more_stringent/3).\n");
     }
 
     private void getBKTranslation(StringBuilder bkBuilder) {
 
+        for (EDMCaseDescription cd : this.cases) {
+            bkBuilder.append("situation(" + formatShortName(cd.getShortName()) + ").\n");
+            addedPredicates.add("situation");
+        }
+
+        bkBuilder.append("\n");
+
         for (Set<EDMAlternative> as : alternatives) {
             for (EDMAlternative alternative : as) {
                 bkBuilder.append("alternative(" + formatShortName(alternative.getShortName()) + ").\n");
+                addedPredicates.add("alternative");
+            }
+        }
+
+        bkBuilder.append("\n");
+
+        for (EDMAbstractInstance feature : this.situationFeatures) {
+            bkBuilder.append("feature(" + formatShortName(feature.getShortName()) + ").\n");
+            addedPredicates.add("feature");
+        }
+
+        bkBuilder.append("\n");
+
+        for (EDMAbstractInstance duty : this.duties) {
+            bkBuilder.append("duty(" + formatShortName(duty.getShortName()) + ").\n");
+            addedPredicates.add("duty");
+        }
+
+        bkBuilder.append("\n");
+
+        for (EDMCaseDescription cd : this.cases) {
+            for (EDMAbstractInstance feature : cd.getSituationFeatures()) {
+                bkBuilder.append("hasFeature(" + formatShortName(cd.getShortName()) + ", " + formatShortName(feature.getShortName()) + ").\n");
+                addedPredicates.add("hasFeature");
+            }
+        }
+
+        bkBuilder.append("\n");
+
+        for (EDMCaseDescription cd : this.cases) {
+            for (EDMAlternative alternative : cd.getAlternatives()) {
+                bkBuilder.append("hasAlternative(" + formatShortName(cd.getShortName()) + ", " + formatShortName(alternative.getShortName()) + ").\n");
+                addedPredicates.add("hasAlternative");
             }
         }
 
@@ -74,12 +117,12 @@ public class EDMCaseBaseProbFOILTranslator {
                         EDMDutyFeature d2 = a2.getDuties().stream().filter((d) -> d.getDuty().equals(duty)).findFirst().orElse(null);
                         if (d2 == null) continue;
                         if (gravityIsHigher(d1.getGravity(), d2.getGravity())) {
-                            bkBuilder.append("gt_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a1.getShortName()) + ", " + formatShortName(a2.getShortName()) + ").\n");
-                            addedPredicates.add("gt_" + formatShortName(duty.getShortName()));
+                            bkBuilder.append("hasDuty(" + formatShortName(a1.getShortName()) + ", " + formatShortName(duty.getShortName()) + ").\n");
+                            addedPredicates.add("hasDuty");
                         }
                         if (gravityIsHigher(d2.getGravity(), d1.getGravity())) {
-                            bkBuilder.append("gt_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a2.getShortName()) + ", " + formatShortName(a1.getShortName()) + ").\n");
-                            addedPredicates.add("gt_" + formatShortName(duty.getShortName()));
+                            bkBuilder.append("hasDuty(" + formatShortName(a2.getShortName()) + ", " + formatShortName(duty.getShortName()) + ").\n");
+                            addedPredicates.add("hasDuty");
                         }
                     }
                 }
@@ -87,29 +130,6 @@ public class EDMCaseBaseProbFOILTranslator {
         }
 
         bkBuilder.append("\n");
-
-        // not duties
-
-        for (EDMAbstractInstance duty : duties) {
-            for (Set<EDMAlternative> as : alternatives) {
-                List<EDMAlternative> alternativeList = new ArrayList<>(as);
-                for (int i = 0; i < alternativeList.size(); i++) {
-                    EDMAlternative a1 = alternativeList.get(i);
-                    EDMDutyFeature d1 = a1.getDuties().stream().filter((d) -> d.getDuty().equals(duty)).findFirst().orElse(null);
-                    if (d1 == null) continue;
-                    for (int j = i + 1; j < alternativeList.size(); j++) {
-                        EDMAlternative a2 = alternativeList.get(j);
-                        EDMDutyFeature d2 = a2.getDuties().stream().filter((d) -> d.getDuty().equals(duty)).findFirst().orElse(null);
-                        if (d2 == null) continue;
-                        if (!(gravityIsHigher(d1.getGravity(), d2.getGravity()) || gravityIsHigher(d2.getGravity(), d1.getGravity()))) {
-                            bkBuilder.append("eq_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a1.getShortName()) + ", " + formatShortName(a2.getShortName()) + ").\n");
-                            bkBuilder.append("eq_" + formatShortName(duty.getShortName()) + "(" + formatShortName(a2.getShortName()) + ", " + formatShortName(a1.getShortName()) + ").\n");
-                            addedPredicates.add("eq_" + formatShortName(duty.getShortName()));
-                        }
-                    }
-                }
-            }
-        }
     }
 
     private boolean gravityIsHigher(EDMInstance gravity1, EDMInstance gravity2) {
@@ -118,29 +138,31 @@ public class EDMCaseBaseProbFOILTranslator {
     }
 
     private void getExamplesTranslation(StringBuilder examplesBuilder) {
-        for (Set<EDMAlternative> as : alternatives) {
-            List<EDMAlternative> alternativeList = new ArrayList<>(as);
+        for (EDMCaseDescription cd : this.cases) {
+            List<EDMAlternative> alternativeList = new ArrayList<>(cd.getAlternatives());
             for (int i = 0; i < alternativeList.size(); i++) {
                 EDMAlternative a1 = alternativeList.get(i);
                 for (int j = i + 1; j < alternativeList.size(); j++) {
                     EDMAlternative a2 = alternativeList.get(j);
                     Double p1 = alternativeProbability.get(a1).get(a2);
                     Double p2 = alternativeProbability.get(a2).get(a1);
-                    examplesBuilder.append(p1.toString() + "::more_ethical(" + formatShortName(a1.getShortName()) + ", " + formatShortName(a2.getShortName()) + ").\n");
-                    examplesBuilder.append(p2.toString() + "::more_ethical(" + formatShortName(a2.getShortName()) + ", " + formatShortName(a1.getShortName()) + ").\n");
+                    examplesBuilder.append(p1.toString() + "::more_stringent(" + formatShortName(a1.getShortName()) + ", " + formatShortName(a2.getShortName()) + ", " + formatShortName(cd.getShortName()) + ").\n");
+                    examplesBuilder.append(p2.toString() + "::more_stringent(" + formatShortName(a2.getShortName()) + ", " + formatShortName(a1.getShortName()) + ", " + formatShortName(cd.getShortName()) + ").\n");
                 }
             }
         }
     }
 
     private String formatShortName(String shortName) {
-        return shortName.replace('-','_').replace('.','_');
+        return "\'" + shortName.replace('-','_').replace('.','_').toLowerCase() + "\'";
     }
 
     private void getPossiblyDuplicatedInstances(Set<EDMCaseDescription> cases) {
         for (EDMCaseDescription description : cases) {
             alternatives.add(description.getAlternatives());
             Double totalVotesSituation = 0.0;
+            for (EDMInstance feature : description.getSituationFeatures())
+                this.situationFeatures.add(feature);
             for (EDMAlternative alternative : description.getAlternatives())
                 totalVotesSituation += Double.valueOf(alternative.getVotes().getShortName());
             for (EDMAlternative alternative : description.getAlternatives()) {

@@ -1,7 +1,5 @@
 import builder.EDMCaseDescriptionBuilder;
-import cases.EDMAlternative;
 import cases.EDMCaseDescription;
-import cases.EDMInstance;
 import es.ucm.fdi.gaia.jcolibri.cbrcore.CBRQuery;
 import es.ucm.fdi.gaia.jcolibri.exception.ExecutionException;
 import ilp.EDMProbFOILSolver;
@@ -11,7 +9,7 @@ import java.util.Set;
 
 public class EDMMain {
 
-    final private static Integer K = 12;
+    final private static Integer K = 20;
 
     public static void main(String[] args) {
 
@@ -26,7 +24,7 @@ public class EDMMain {
             CBRQuery query = getCbrQuery();
             // 3. Run query
             cbr.cycle(query);
-            printMostSimilarCases(cbr);
+//            printMostSimilarCases(cbr);
             EDMCaseBaseProbFOILTranslator translator = translateProbFOIL(cbr);
             runILPSolver(translator);
             cbr.postCycle();
@@ -41,18 +39,18 @@ public class EDMMain {
 
     private static void runILPSolver(EDMCaseBaseProbFOILTranslator translator) throws Exception {
         EDMProbFOILSolver ilpSolver = new EDMProbFOILSolver();
-//        long time = System.nanoTime();
+        long time = System.nanoTime();
         ilpSolver.solve(translator.getTranslationBK(), translator.getTranslationModes(), translator.getTranslationExamples());
-//        double elapsedTimeInSecond = (double) (System.nanoTime() - time) / 1_000_000_000;
-//        System.out.println("\nPopper result (" + String.format("%.2f", elapsedTimeInSecond) + " seconds):");
-//        for (String s : ilpSolver.getResult())
-//            System.out.println(s);
+        double elapsedTimeInSecond = (double) (System.nanoTime() - time) / 1_000_000_000;
+        System.out.println("\nResult (" + String.format("%.2f", elapsedTimeInSecond) + " seconds):");
+        for (String s : ilpSolver.getResult())
+            System.out.println(s);
     }
 
     private static EDMCaseBaseProbFOILTranslator translateProbFOIL(EDMCaseSolver cbr) {
         EDMCaseBaseProbFOILTranslator translator = new EDMCaseBaseProbFOILTranslator();
         translator.translate(cbr.getResults());
-        System.out.println("\n"+"Translation finished.\n");
+        System.out.println(K.toString()+" examples translated.");
 //        System.out.println(translator);
         return translator;
     }

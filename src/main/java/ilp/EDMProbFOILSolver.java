@@ -23,10 +23,9 @@ public class EDMProbFOILSolver {
         this.backgroundKnowledge = backgroundKnowledge;
         this.modes = modes;
         this.examples = examples;
-        File bkFile = createResourceFile("o-bk", ".pl", this.backgroundKnowledge + "\n" + this.examples);
-        File modesFile = createResourceFile("o-modes", ".pl", this.modes);
-        String command = getCommand(bkFile, modesFile);
-//        runILPSolver(command);
+        File bkFile = createTemporaryFile("o-bk", ".pl", this.modes + "\n" + this.backgroundKnowledge + "\n" + this.examples);
+        String command = getCommand(bkFile);
+        this.runILPSolver(command);
     }
 
     private void runILPSolver(String command) throws IOException {
@@ -39,10 +38,10 @@ public class EDMProbFOILSolver {
         }
     }
 
-    private String getCommand(File bkFile, File modesFile) {
+    private String getCommand(File bkFile) {
         String command = "python ";
-        command += Thread.currentThread().getContextClassLoader().getResource("popper/popper.py").getPath();
-        command += " " + modesFile.getAbsolutePath() + " " + bkFile.getAbsolutePath();
+        command += Thread.currentThread().getContextClassLoader().getResource("probfoil").getPath() + "/probfoil.py";
+        command += " " + bkFile.getAbsolutePath();
         return command;
     }
 
