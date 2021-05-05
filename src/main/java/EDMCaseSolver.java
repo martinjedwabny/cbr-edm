@@ -45,7 +45,7 @@ public class EDMCaseSolver implements StandardCBRApplication {
     public CBRCaseBase preCycle() throws ExecutionException {
         this._caseBase.init(this._connector);
 
-        System.out.println("\nLoaded "+this._caseBase.getCases().size()+" cases successfully.");
+//        System.out.println("\nLoaded "+this._caseBase.getCases().size()+" cases successfully.");
 //        for (CBRCase c : this._caseBase.getCases()) {
 //            System.out.println(c);
 //        }
@@ -77,8 +77,8 @@ public class EDMCaseSolver implements StandardCBRApplication {
         /*
         5. Print query, retrieve 10 most similar cases and print them
          */
-        System.out.println("\nQuery: "+query.getDescription());
-        System.out.println();
+//        System.out.println("\nQuery: "+query.getDescription());
+//        System.out.println();
         /*
         6. 'eval' object collects the top 10 results using the 'simConfig' object
             obtained using NNScoringMethod.evaluateSimilarity function

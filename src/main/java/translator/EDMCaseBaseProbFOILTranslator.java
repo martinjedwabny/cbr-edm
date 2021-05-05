@@ -36,11 +36,11 @@ public class EDMCaseBaseProbFOILTranslator {
     }
 
     private void getModesTranslation(StringBuilder modesBuilder) {
-        modesBuilder.append("mode(hasFeature(+,c)).\n");
+//        modesBuilder.append("mode(hasFeature(+,c)).\n");
         modesBuilder.append("mode(hasDuty(+,c)).\n");
         modesBuilder.append("\n");
 
-        modesBuilder.append("base(hasFeature(situation,feature)).\n");
+//        modesBuilder.append("base(hasFeature(situation,feature)).\n");
         modesBuilder.append("base(hasDuty(alternative,duty)).\n");
         modesBuilder.append("base(more_stringent(alternative,alternative,situation)).\n");
         modesBuilder.append("\n");

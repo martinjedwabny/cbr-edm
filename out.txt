@@ -1,0 +1,31 @@
+================ SETTINGS ================
+               files:	['/var/folders/0n/hd9626ws47s43h14c6gf6_d80000gn/T/o-bk3800939977427621204.pl']
+           probfoil1:	False
+           beam_size:	5
+                   p:	None
+                   l:	None
+             verbose:	None
+   symmetry_breaking:	True
+              target:	None
+                seed:	None
+                 log:	None
+================= FINAL THEORY =================
+0.21428571::more_stringent(A,B,C) :- hasFeature(C,'has_something_to_hide()'), hasDuty(A,'self_improvement')
+0.27272728::more_stringent(A,B,C) :- hasFeature(C,'has_something_to_hide()'), hasDuty(A,'non_maleficence')
+0.26315789::more_stringent(A,B,C) :- hasFeature(C,'has_something_to_hide()'), hasDuty(B,'self_improvement')
+0.55555556::more_stringent(A,B,C) :- hasDuty(A,'beneficence')
+0.71428571::more_stringent(A,B,C) :- hasFeature(C,'persecuted_by(hank)'), hasDuty(B,'non_maleficence')
+0.64285714::more_stringent(A,B,C) :- hasFeature(C,'danger_losing_job()'), hasDuty(A,'non_maleficence')
+0.19008265::more_stringent(A,B,C) :- hasFeature(C,'has_something_to_hide()'), hasDuty(A,'self_improvement')
+0.50649351::more_stringent(A,B,C) :- hasFeature(C,'persecuted_by(hank)'), hasDuty(A,'fidelity')
+0.35714286::more_stringent(A,B,C) :- hasFeature(C,'danger_losing_job()'), hasDuty(B,'non_maleficence')
+0.44444444::more_stringent(A,B,C) :- hasDuty(B,'beneficence')
+0.2002551::more_stringent(A,B,C) :- hasFeature(C,'has_something_to_hide()'), hasDuty(B,'non_maleficence')
+0.06696428::more_stringent(A,B,C) :- hasDuty(B,'justice')
+==================== SCORES ====================
+            Accuracy:	 0.6988054235349317
+           Precision:	 0.8875366023709599
+              Recall:	 0.45530432237266
+================== STATISTICS ==================
+    Rule evaluations:	1176
+          Total time:	484.3842s

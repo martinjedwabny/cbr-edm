@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class EDMMain {
 
-    final private static Integer K = 20;
+    final private static Integer K = 30;
 
     public static void main(String[] args) {
 
@@ -18,16 +18,15 @@ public class EDMMain {
 //        EDMXMLFormatter.formatXMLNoAbbrev(original,formatted);
 
         try {
-            // 1. Initialize CBR object
-            EDMCaseSolver cbr = new EDMCaseSolver(K);
-            // 2. Create query with custom values
-            CBRQuery query = getCbrQuery();
-            // 3. Run query
-            cbr.cycle(query);
-//            printMostSimilarCases(cbr);
-            EDMCaseBaseProbFOILTranslator translator = translateProbFOIL(cbr);
-            runILPSolver(translator);
-            cbr.postCycle();
+            for (int K = 1; K <= 40; K++) {
+                System.out.println("K="+ K);
+                double e = 0;
+                for (int i = 0; i < 5; i++) {
+                    e += test(K);
+                }
+                e = e / 5.0;
+                System.out.println("\nResult (" + String.format("%.2f", e) + " seconds):");
+            }
         } catch (ExecutionException var12) {
             System.out.println(var12.getMessage());
             var12.printStackTrace();
@@ -37,20 +36,29 @@ public class EDMMain {
 
     }
 
+    private static double test(int K) throws Exception {
+        long time = System.nanoTime();
+        EDMCaseSolver cbr = new EDMCaseSolver(K);
+        CBRQuery query = getCbrQuery();
+        cbr.cycle(query);
+        EDMCaseBaseProbFOILTranslator translator = translateProbFOIL(cbr);
+        runILPSolver(translator);
+        cbr.postCycle();
+        double elapsedTimeInSecond = (double) (System.nanoTime() - time) / 1_000_000_000;
+        return elapsedTimeInSecond;
+    }
+
     private static void runILPSolver(EDMCaseBaseProbFOILTranslator translator) throws Exception {
         EDMProbFOILSolver ilpSolver = new EDMProbFOILSolver();
-        long time = System.nanoTime();
         ilpSolver.solve(translator.getTranslationBK(), translator.getTranslationModes(), translator.getTranslationExamples());
-        double elapsedTimeInSecond = (double) (System.nanoTime() - time) / 1_000_000_000;
-        System.out.println("\nResult (" + String.format("%.2f", elapsedTimeInSecond) + " seconds):");
-        for (String s : ilpSolver.getResult())
-            System.out.println(s);
+//        for (String s : ilpSolver.getResult())
+//            System.out.println(s);
     }
 
     private static EDMCaseBaseProbFOILTranslator translateProbFOIL(EDMCaseSolver cbr) {
         EDMCaseBaseProbFOILTranslator translator = new EDMCaseBaseProbFOILTranslator();
         translator.translate(cbr.getResults());
-        System.out.println(K.toString()+" examples translated.");
+//        System.out.println(K.toString()+" examples translated.");
 //        System.out.println(translator);
         return translator;
     }
