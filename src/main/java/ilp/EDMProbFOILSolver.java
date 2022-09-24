@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class EDMProbFOILSolver {
     private String backgroundKnowledge = "";
@@ -41,7 +42,7 @@ public class EDMProbFOILSolver {
     private String getCommand(File bkFile) {
         String command = "python ";
         command += Thread.currentThread().getContextClassLoader().getResource("probfoil").getPath() + "/probfoil.py";
-        command += " " + bkFile.getAbsolutePath();
+        command += " " + bkFile.getAbsolutePath() + " -s " + (new Random()).nextInt(100);
         return command;
     }
 

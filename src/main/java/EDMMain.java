@@ -18,15 +18,16 @@ public class EDMMain {
 //        EDMXMLFormatter.formatXMLNoAbbrev(original,formatted);
 
         try {
-            for (int K = 1; K <= 40; K++) {
+            for (int K = 30; K <= 30; K++) {
                 System.out.println("K="+ K);
                 double e = 0;
                 for (int i = 0; i < 5; i++) {
                     e += test(K);
                 }
                 e = e / 5.0;
-                System.out.println("\nResult (" + String.format("%.2f", e) + " seconds):");
+//                System.out.println("\nResult (" + String.format("%.2f", e) + " seconds):");
             }
+            test(60);
         } catch (ExecutionException var12) {
             System.out.println(var12.getMessage());
             var12.printStackTrace();
@@ -34,6 +35,15 @@ public class EDMMain {
             var13.printStackTrace();
         }
 
+    }
+
+    private static void testQuality(int K) throws Exception {
+        EDMCaseSolver cbr = new EDMCaseSolver(K);
+        CBRQuery query = getCbrQuery();
+        cbr.cycle(query);
+        EDMCaseBaseProbFOILTranslator translator = translateProbFOIL(cbr);
+        runILPSolver(translator);
+        cbr.postCycle();
     }
 
     private static double test(int K) throws Exception {
@@ -51,8 +61,8 @@ public class EDMMain {
     private static void runILPSolver(EDMCaseBaseProbFOILTranslator translator) throws Exception {
         EDMProbFOILSolver ilpSolver = new EDMProbFOILSolver();
         ilpSolver.solve(translator.getTranslationBK(), translator.getTranslationModes(), translator.getTranslationExamples());
-//        for (String s : ilpSolver.getResult())
-//            System.out.println(s);
+        for (String s : ilpSolver.getResult())
+            System.out.println(s);
     }
 
     private static EDMCaseBaseProbFOILTranslator translateProbFOIL(EDMCaseSolver cbr) {

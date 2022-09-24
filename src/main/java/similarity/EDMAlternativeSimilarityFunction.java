@@ -19,11 +19,11 @@ public class EDMAlternativeSimilarityFunction implements LocalSimilarityFunction
         EDMAlternative i1 = (EDMAlternative) caseObject;
         EDMAlternative i2 = (EDMAlternative) queryObject;
 
-        Double featuresSim = new EDMSetGreedySimilarityFunction(new Equal()).compute(i1.getFeatures(), i2.getFeatures());
+//        Double featuresSim = new EDMSetGreedySimilarityFunction(new Equal()).compute(i1.getFeatures(), i2.getFeatures());
 
         Double dutySim = new EDMSetGreedySimilarityFunction(new Equal()).compute(i1.getDuties(), i2.getDuties());
 
-        return (featuresSim + dutySim) / 2.0;
+        return dutySim;
     }
 
     @Override

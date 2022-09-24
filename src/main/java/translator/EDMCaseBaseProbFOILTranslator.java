@@ -16,6 +16,7 @@ public class EDMCaseBaseProbFOILTranslator {
     private HashMap<EDMAlternative, HashMap<EDMAlternative, Double>> alternativeProbability = new HashMap<>();
     private HashSet<EDMAbstractInstance> situationFeatures = new HashSet<>();
     private HashSet<EDMAbstractInstance> duties = new HashSet<>();
+    private HashSet<EDMAbstractInstance> gravities = new HashSet<>();
     private HashSet<String> addedPredicates = new HashSet<>();
 
     public void translate(Set<EDMCaseDescription> cases) {
@@ -36,13 +37,11 @@ public class EDMCaseBaseProbFOILTranslator {
     }
 
     private void getModesTranslation(StringBuilder modesBuilder) {
-//        modesBuilder.append("mode(hasFeature(+,c)).\n");
-        modesBuilder.append("mode(hasDuty(+,c)).\n");
+        modesBuilder.append("mode(hasDuty(+,c,c)).\n");
         modesBuilder.append("\n");
 
-//        modesBuilder.append("base(hasFeature(situation,feature)).\n");
-        modesBuilder.append("base(hasDuty(alternative,duty)).\n");
-        modesBuilder.append("base(more_stringent(alternative,alternative,situation)).\n");
+        modesBuilder.append("base(hasDuty(alternative,duty,gravity)).\n");
+        modesBuilder.append("base(answer(situation,alternative)).\n");
         modesBuilder.append("\n");
 
         modesBuilder.append("option(negation, off).\n");
@@ -51,7 +50,7 @@ public class EDMCaseBaseProbFOILTranslator {
         modesBuilder.append("required(hasDuty).\n");
         modesBuilder.append("\n");
 
-        modesBuilder.append("learn(more_stringent/3).\n");
+        modesBuilder.append("learn(answer/2).\n");
     }
 
     private void getBKTranslation(StringBuilder bkBuilder) {
@@ -70,12 +69,12 @@ public class EDMCaseBaseProbFOILTranslator {
             }
         }
 
-        bkBuilder.append("\n");
-
-        for (EDMAbstractInstance feature : this.situationFeatures) {
-            bkBuilder.append("feature(" + formatShortName(feature.getShortName()) + ").\n");
-            addedPredicates.add("feature");
-        }
+//        bkBuilder.append("\n");
+//
+//        for (EDMAbstractInstance feature : this.situationFeatures) {
+//            bkBuilder.append("feature(" + formatShortName(feature.getShortName()) + ").\n");
+//            addedPredicates.add("feature");
+//        }
 
         bkBuilder.append("\n");
 
@@ -86,21 +85,28 @@ public class EDMCaseBaseProbFOILTranslator {
 
         bkBuilder.append("\n");
 
-        for (EDMCaseDescription cd : this.cases) {
-            for (EDMAbstractInstance feature : cd.getSituationFeatures()) {
-                bkBuilder.append("hasFeature(" + formatShortName(cd.getShortName()) + ", " + formatShortName(feature.getShortName()) + ").\n");
-                addedPredicates.add("hasFeature");
-            }
+        for (EDMAbstractInstance gravity : this.gravities) {
+            bkBuilder.append("gravity(" + formatShortName(gravity.getShortName()) + ").\n");
+            addedPredicates.add("gravity");
         }
+
+//        bkBuilder.append("\n");
+//
+//        for (EDMCaseDescription cd : this.cases) {
+//            for (EDMAbstractInstance feature : cd.getSituationFeatures()) {
+//                bkBuilder.append("hasFeature(" + formatShortName(cd.getShortName()) + ", " + formatShortName(feature.getShortName()) + ").\n");
+//                addedPredicates.add("hasFeature");
+//            }
+//        }
 
         bkBuilder.append("\n");
 
-        for (EDMCaseDescription cd : this.cases) {
-            for (EDMAlternative alternative : cd.getAlternatives()) {
-                bkBuilder.append("hasAlternative(" + formatShortName(cd.getShortName()) + ", " + formatShortName(alternative.getShortName()) + ").\n");
-                addedPredicates.add("hasAlternative");
-            }
-        }
+//        for (EDMCaseDescription cd : this.cases) {
+//            for (EDMAlternative alternative : cd.getAlternatives()) {
+//                bkBuilder.append("hasAlternative(" + formatShortName(cd.getShortName()) + ", " + formatShortName(alternative.getShortName()) + ").\n");
+//                addedPredicates.add("hasAlternative");
+//            }
+//        }
 
         bkBuilder.append("\n");
 
@@ -116,14 +122,9 @@ public class EDMCaseBaseProbFOILTranslator {
                         EDMAlternative a2 = alternativeList.get(j);
                         EDMDutyFeature d2 = a2.getDuties().stream().filter((d) -> d.getDuty().equals(duty)).findFirst().orElse(null);
                         if (d2 == null) continue;
-                        if (gravityIsHigher(d1.getGravity(), d2.getGravity())) {
-                            bkBuilder.append("hasDuty(" + formatShortName(a1.getShortName()) + ", " + formatShortName(duty.getShortName()) + ").\n");
-                            addedPredicates.add("hasDuty");
-                        }
-                        if (gravityIsHigher(d2.getGravity(), d1.getGravity())) {
-                            bkBuilder.append("hasDuty(" + formatShortName(a2.getShortName()) + ", " + formatShortName(duty.getShortName()) + ").\n");
-                            addedPredicates.add("hasDuty");
-                        }
+                        translateDuty(bkBuilder, duty, a1, d1);
+                        translateDuty(bkBuilder, duty, a2, d2);
+                        addedPredicates.add("hasDuty");
                     }
                 }
             }
@@ -132,9 +133,24 @@ public class EDMCaseBaseProbFOILTranslator {
         bkBuilder.append("\n");
     }
 
-    private boolean gravityIsHigher(EDMInstance gravity1, EDMInstance gravity2) {
-        List<String> gravities = new ArrayList<String>(Arrays.asList("Extremely-bad","Really-bad","Bad","Neutral","Good","Really-good","Extremely-good"));
-        return gravities.indexOf(gravity1.getShortName()) > gravities.indexOf(gravity2.getShortName());
+    private void translateDuty(StringBuilder bkBuilder, EDMAbstractInstance duty, EDMAlternative a1, EDMDutyFeature d1) {
+        List<String> gravities = new ArrayList<>();
+        String g = formatShortName(d1.getGravity().getShortName());
+        gravities.add(g);
+        if (g.equals("\'extremely_good\'")) {
+            gravities.add("\'really_good\'");
+            gravities.add("\'good\'");
+        } else if (g.equals("\'really_good\'")) {
+            gravities.add("\'good\'");
+        } else if (g.equals("\'extremely_bad\'")) {
+            gravities.add("\'really_bad\'");
+            gravities.add("\'bad\'");
+        } else if (g.equals("\'really_bad\'")) {
+            gravities.add("\'bad\'");
+        }
+        for (String gg : gravities) {
+            bkBuilder.append("hasDuty(" + formatShortName(a1.getShortName()) + ", " + formatShortName(duty.getShortName()) + ", " + gg + ").\n");
+        }
     }
 
     private void getExamplesTranslation(StringBuilder examplesBuilder) {
@@ -146,8 +162,8 @@ public class EDMCaseBaseProbFOILTranslator {
                     EDMAlternative a2 = alternativeList.get(j);
                     Double p1 = alternativeProbability.get(a1).get(a2);
                     Double p2 = alternativeProbability.get(a2).get(a1);
-                    examplesBuilder.append(p1.toString() + "::more_stringent(" + formatShortName(a1.getShortName()) + ", " + formatShortName(a2.getShortName()) + ", " + formatShortName(cd.getShortName()) + ").\n");
-                    examplesBuilder.append(p2.toString() + "::more_stringent(" + formatShortName(a2.getShortName()) + ", " + formatShortName(a1.getShortName()) + ", " + formatShortName(cd.getShortName()) + ").\n");
+                    examplesBuilder.append(p1.toString() + "::answer(" + formatShortName(cd.getShortName()) + ", " + formatShortName(a1.getShortName()) + ").\n");
+                    examplesBuilder.append(p2.toString() + "::answer(" + formatShortName(cd.getShortName()) + ", " + formatShortName(a2.getShortName()) + ").\n");
                 }
             }
         }
@@ -175,6 +191,7 @@ public class EDMCaseBaseProbFOILTranslator {
                 }
                 for (EDMDutyFeature duty : alternative.getDuties()) {
                     duties.add(duty.getDuty());
+                    gravities.add(duty.getGravity());
                 }
             }
         }
